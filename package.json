@@ -1,7 +1,12 @@
 {
 	"name": "course-portal",
 	"version": "1.0.0",
-	"description": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"run": "node src/server.js",
+		"dev": "nodeman src/server.js"
+	},
+	"description": "NAU Course Enrollment Portal",
 	"homepage": "https://github.com/Illusion137/CS212-course-enrollment-portal#readme",
 	"bugs": {
 		"url": "https://github.com/Illusion137/CS212-course-enrollment-portal/issues"
@@ -13,19 +18,14 @@
 	"license": "ISC",
 	"author": "",
 	"type": "commonjs",
-	"main": "server.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"run": "node server.js",
-		"dev": "nodeman server.js"
-	},
+	"main": "src/server.js",
 	"devDependencies": {
 		"@azure/static-web-apps-cli": "^2.0.8",
 		"nodemon": "^3.1.14"
 	},
 	"dependencies": {
-		"dotenv": "^17.3.1",
-		"ejs": "^4.0.1",
+		"dotenv": "^17.4.1",
+		"ejs": "^5.0.1",
 		"express": "^5.2.1"
 	}
 }
