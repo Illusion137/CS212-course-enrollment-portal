@@ -4,7 +4,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node src/server.js",
-		"dev": "nodeman src/server.js"
+		"dev": "nodemon src/server.js"
 	},
 	"description": "NAU Course Enrollment Portal",
 	"homepage": "https://github.com/Illusion137/CS212-course-enrollment-portal#readme",
@@ -21,6 +21,12 @@
 	"main": "src/server.js",
 	"devDependencies": {
 		"@azure/static-web-apps-cli": "^2.0.8",
+		"@eslint/css": "^1.1.0",
+		"@eslint/js": "^10.0.1",
+		"@eslint/json": "^1.2.0",
+		"@eslint/markdown": "^8.0.1",
+		"eslint": "^10.2.0",
+		"globals": "^17.4.0",
 		"nodemon": "^3.1.14"
 	},
 	"dependencies": {

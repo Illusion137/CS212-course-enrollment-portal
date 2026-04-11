@@ -7,11 +7,13 @@ const port = process.env.PORT ?? 3000;
 app.use(express.static('public'));
 app.use(express.json());
 
+app.set('view engine', 'ejs');
+
 app.use('/', (req, res) => {
-	res.sendFile('index.html', { root: './views' });
+	res.status(404).render('pages/not_found');
 });
 app.use((req, res) => {
-	res.status(404).sendFile('not_found.html', { root: './views' });
+	res.status(404).render('pages/not_found');
 });
 
 app.listen(port, () => {
