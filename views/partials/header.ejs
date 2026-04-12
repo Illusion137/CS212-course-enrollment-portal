@@ -1,33 +1,32 @@
 <%
-const navLinks = [
+const nav_links = [
 	{ href: '/', label: 'Catalog' },
 	{ href: '/view-courses', label: 'View Courses' },
 	{ href: '/manage-courses', label: 'Manage Courses' },
 	{ href: '/notifications', label: 'Notifications' },
 ];
 %>
-<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+<nav class="navbar navbar-expand bg-gradient shadow-sm">
 	<div class="container-fluid">
-		<a class="navbar-brand fw-semibold d-none d-lg-block" href="/">NAPI Course Portal</a>
-		<button
-			class="navbar-toggler border-0 shadow-none"
-			type="button"
-			data-bs-toggle="collapse"
-			data-bs-target="#navbarNav"
-			aria-controls="navbarNav"
-			aria-expanded="false"
-			aria-label="Toggle navigation"
-		>
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<div class="navbar-nav ms-auto gap-1">
-				<% navLinks.forEach(link => { %>
-				<a class="nav-link <%= typeof title !== 'undefined' && title === link.label ? 'text-dark fw-semibold' : 'text-secondary' %>"
-					<%= typeof title !== 'undefined' && title === link.label ? 'aria-current="page"' : '' %>
-					href="<%= link.href %>"><%= link.label %></a>
+		<a class="navbar-brand fw-semibold" href="/">NAPI Course Portal</a>
+		<div id="nav-inline" class="navbar-nav ms-auto gap-1 rounded-3 bg-light p-1" style="flex-wrap:nowrap">
+			<% nav_links.forEach(link => { %>
+			<a class="nav-link <%= typeof title !== "undefined" && title === link.label ? "text-dark fw-semibold" : "text-secondary" %>"
+				<%= typeof title !== "undefined" && title === link.label ? "aria-current=\"page\"" : "" %>
+				href="<%= link.href %>"><%= link.label %></a>
+			<% }) %>
+		</div>
+		<div id="nav-dropdown" class="dropdown ms-auto">
+			<button class="btn btn-light border-0 shadow-none p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<ul class="dropdown-menu dropdown-menu-end">
+				<% nav_links.forEach(link => { %>
+					<li>
+						<a class="dropdown-item <%= typeof title !== "undefined" && title === link.label ? "fw-semibold" : "" %>" href="<%= link.href %>"><%= link.label %></a>
+					</li>
 				<% }) %>
-			</div>
+			</ul>
 		</div>
 	</div>
 </nav>

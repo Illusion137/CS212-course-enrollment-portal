@@ -1,0 +1,15 @@
+#nav-inline {
+	display: flex;
+}
+#nav-dropdown {
+	display: none;
+}
+
+@media (max-width: 700px) {
+	#nav-inline {
+		display: none;
+	}
+	#nav-dropdown {
+		display: block;
+	}
+}
