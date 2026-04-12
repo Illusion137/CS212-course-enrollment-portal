@@ -1,1 +1,41 @@
-<div></div>
+<div class="m-5 d-flex flex-column gap-4"><%- include('../partials/schedule_view') %> <%- include('../partials/course_map') %></div>
+
+<script>
+	// TODO: replace with $.getJSON('/api/students/:id/schedule', ...) once student system is ready
+	// Courses taken directly from courses.json (FOR 320-001, MGT 390-002, CCJ 408H-001, ECI 411H-001)
+	const DEMO_COURSES = [
+		{
+			label: 'FOR 320 - Forest Biometrics',
+			days: 'TR',
+			startTime: '12:30 PM',
+			endTime: '1:45 PM',
+			room: 'Southwest Forest Sci 101',
+		},
+		{
+			label: 'MGT 390 - Creativity & Innovation',
+			days: 'MW',
+			startTime: '3:30 PM',
+			endTime: '4:45 PM',
+			room: 'W.A.FrankeCollBusiness 201',
+		},
+		{
+			label: 'CCJ 408H - Internship',
+			days: 'MWF',
+			startTime: '10:00 AM',
+			endTime: '10:50 AM',
+			room: 'SBS-Raul H. Castro 110',
+		},
+		{
+			label: 'ECI 411H - Integrated Literacy III',
+			days: 'TR',
+			startTime: '3:30 PM',
+			endTime: '4:45 PM',
+			room: 'College of Education 302',
+		},
+	];
+
+	$(function () {
+		render_schedule(DEMO_COURSES);
+		render_course_map(DEMO_COURSES);
+	});
+</script>
