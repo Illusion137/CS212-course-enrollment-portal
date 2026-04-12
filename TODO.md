@@ -6,14 +6,14 @@
 
 -   [ ] Create a reusable Weekly Schedule Viewer component in HTML, and then migrate it into JavaScript by creating a function to insert the HTML anywhere we desire. This component will display the user's current schedule and how adding certain classes will change their schedule.
 -   [ ] Create a reusable Course Map component in HTML, and then migrate it into JavaScript by creating a function to insert the HTML anywhere we desire. This component will show the route the student will have to take for each course, and show the locations of the courses during course search.
--   [ ] Create a dynamic layout for the full application that includes the navbar and content for the mobile view, and the navbar, sidebar, and content for the desktop view. Dynamically swapping between them based on screen width.
+-   [x] Create a dynamic layout for the full application that includes the navbar and content for the mobile view, and the navbar, sidebar, and content for the desktop view. Dynamically swapping between them based on screen width.
 -   [ ] Create a reusable Course Item List component to show the list of courses that we fetch from the server. Then, integrate it into a Catalog page. The page will have searching and filtering built in.
 -   [ ] Write a deployment script to automatically deploy our app to Azure, potentially integrating it with GitHub Actions.
 
 ## Aaron Tasks
 
--   [ ] Initialize the backend. Set up the folder structure, create a server.js, install dependencies from npm such as nodemon and express, and configure environment variables in .env.
--   [ ] Take a large-scale dataset of courses that are offered at NAU from "https://api.extended.nau.edu/api/CourseCatalog"(no longer available, but cached locally in JSON format) and parse it to extract prerequisites, corequisites, and more. Then, for each course, generate an array of class times and waitlist statuses, and finally combine all the data into a single JSON array.
+-   [x] Initialize the backend. Set up the folder structure, create a server.js, install dependencies from npm such as nodemon and express, and configure environment variables in .env.
+-   [x] Take a large-scale dataset of courses that are offered at NAU from "https://api.extended.nau.edu/api/CourseCatalog"(no longer available, but cached locally in JSON format) and parse it to extract prerequisites, corequisites, and more. Then, for each course, generate an array of class times and waitlist statuses, and finally combine all the data into a single JSON array.
 -   [ ] Implement GET /api/courses/:id and /api/courses?q=x&limit=y&offset=z. Using url query parameters to filter the list of courses in the catalog. Some filters include: q=search_query, limit=pagination_limit, offset=pagination_offset, instructor=instructor_query, subject=subject_id, etc. Noting that search_query searches generally through all the information in a given course.
 -   [ ] Implement GET /api/students/:id/courses. Fetching the students' current enrolled courses based on their student ID. Allowing for a body to the request to contain {additional_course_ids: []} to display.
 -   [ ] Implement a JSON database to store information about students. Storing their enrolled courses, notifications, and waitlisted courses.

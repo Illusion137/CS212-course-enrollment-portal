@@ -1,0 +1,6 @@
+<div id="course-list" class="mt-4">
+	<% if (typeof courses !== 'undefined' && Object.keys(courses).length > 0) { %> <% Object.values(courses).forEach(course => { %> <%- include('course_list_item', { course }) %> <% }) %> <% } else {
+	%>
+	<p class="text-muted">No courses to display. Use the filters above to search for courses.</p>
+	<% } %>
+</div>

@@ -1,0 +1,39 @@
+<div class="card mb-3">
+	<div class="card-header bg-white d-flex justify-content-between align-items-center" role="button" data-bs-toggle="collapse" data-bs-target="#course-<%= course.subject %><%= course.course_nbr %>">
+		<h5 class="mb-0 fw-bold"><%= course.subject %> <%= course.course_nbr %> - <%= course.title %></h5>
+		<span class="collapse-icon">&#9662;</span>
+	</div>
+	<div class="collapse" id="course-<%= course.subject %><%= course.course_nbr %>">
+		<div class="card-body p-0">
+			<% const sectionEntries = Object.entries(course.sections); %> <% sectionEntries.forEach(([sectionId, section], i) => { %>
+			<div class="d-flex border-bottom<%= i === sectionEntries.length - 1 ? '-0' : '' %> py-2 px-3">
+				<div class="me-3 text-nowrap" style="min-width: 120px">
+					<strong>Section <%= section.data.section_nbr || String(i + 1).padStart(3, '0') %>:</strong>
+				</div>
+				<div class="border-start ps-3" style="border-color: #ccc !important">
+					<table class="table table-sm table-borderless mb-0">
+						<thead>
+							<tr class="text-muted small">
+								<th>Days & Times</th>
+								<th>Room</th>
+								<th>Instructor</th>
+								<th>Available Seats</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><%= section.data.days || 'TBA' %> <%= section.data.times || '' %></td>
+								<td><%= section.data.room || 'TBA' %></td>
+								<td><%= section.data.instructor || 'TBA' %></td>
+								<td><%= section.data.available_seats != null ? section.data.available_seats : 'TBA' %></td>
+								<td><%= section.data.status || 'TBA' %></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<% }) %>
+		</div>
+	</div>
+</div>
