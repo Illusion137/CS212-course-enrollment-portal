@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { readDB, writeDB } = require('../utils/db');
 
-const OVERRIDES_DB = './db/overrides.json';
+const OVERRIDES_DB = '../db/overrides.json';
 
 // Submit override
 router.post('/', (req, res) => {

@@ -3,8 +3,8 @@ const router = express.Router();
 const { readDB, writeDB } = require('../utils/db');
 const { hasConflict } = require('../utils/scheduler');
 
-const STUDENTS_DB = './db/students.json';
-const COURSES_DB = './db/courses.json';
+const STUDENTS_DB = '../db/students.json';
+const COURSES_DB = '../db/courses.json';
 
 function notify(student, message) {
 	student.notifications.push({

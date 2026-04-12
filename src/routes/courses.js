@@ -3,7 +3,7 @@ const router = express.Router();
 const { readDB } = require('../utils/db');
 const path = require('path');
 
-const CATALOG = path.join(__dirname, '../db/catalog.json');
+const COURSES_DB = '../db/catalog.json';
 
 function courseId(course) {
 	return `${course.Subject}-${course.CatalogNbr}`;
