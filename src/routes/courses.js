@@ -87,7 +87,7 @@ router.get('/', (req, res) => {
 // GET /api/courses/filters?q=...&subject=...
 router.get('/filters', (req, res) => {
 	const { q, subject } = req.query;
-	const courses = readDB(CATALOG);
+	let courses = readDB(CATALOG);
 
 	if (subject?.trim()) courses = courses.filter((course) => course.Subject === subject.trim());
 	if (q?.trim()) courses = courses.filter((course) => courseSearchBlob(course).includes(q.trim().toLowerCase()));
