@@ -51,7 +51,7 @@ router.get('/', (req, res) => {
 	const limitNum = Math.max(1, Math.min(Number(limit) || 10, 100)); 
 	const offsetNum = Math.max(0, Number(offset) || 0);
 
-	let courses = readDB(COURSES_DB);
+	let courses = readDB(CATALOG);
 
 	if (q && q.trim()) {
 		const needle = q.trim().toLowerCase();
@@ -106,7 +106,7 @@ router.get('/', (req, res) => {
 
 // GET /api/courses/:id  
 router.get('/:id', (req, res) => {
-	const courses = readDB(COURSES_DB);
+	const courses = readDB(CATALOG);
 
 	const rawId = req.params.id.trim();
 	const normalised = rawId.replace(/[_ ]+/, '-').toUpperCase(); // supports Spaces and hyphens
