@@ -3,52 +3,29 @@ const router = express.Router();
 const { readDB } = require('../utils/db');
 const path = require('path');
 
-const CATALOG = path.join(__dirname, '../../tmp/data/parsed_catalog.json');
-
+const CATALOG = path.join(__dirname, '../db/catalog.json');
 
 function courseId(course) {
 	return `${course.Subject}-${course.CatalogNbr}`;
 }
 
 function ci(haystack, needle) {
-	return String(haystack ?? '').toLowerCase().includes(needle.toLowerCase());
+	return String(haystack ?? '')
+		.toLowerCase()
+		.includes(needle.toLowerCase());
 }
-
 
 function courseSearchBlob(course) {
 	const instructors = (course.classTimes ?? []).map((ct) => ct.instructor).join(' ');
-	const prereqText = course.parsedPrerequisites
-		? [...(course.parsedPrerequisites.prerequisites ?? []), ...(course.parsedPrerequisites.corequisites ?? [])].join(' ')
-		: '';
-	return [
-		course.Subject,
-		course.CatalogNbr,
-		course.Title,
-		course.LongTitle,
-		course.Description,
-		course.Level,
-		course.Materials,
-		instructors,
-		prereqText,
-	]
-		.join(' ')
-		.toLowerCase();
+	const prereqText = course.parsedPrerequisites ? [...(course.parsedPrerequisites.prerequisites ?? []), ...(course.parsedPrerequisites.corequisites ?? [])].join(' ') : '';
+	return [course.Subject, course.CatalogNbr, course.Title, course.LongTitle, course.Description, course.Level, course.Materials, instructors, prereqText].join(' ').toLowerCase();
 }
 
 // GET /api/courses with parameters
 router.get('/', (req, res) => {
-	const {
-		q,
-		subject,
-		instructor,
-		level,
-		credits,
-		status,
-		limit = 10,
-		offset = 0,
-	} = req.query;
+	const { q, subject, catalogNbr, instructor, level, credits, status, limit = 10, offset = 0 } = req.query;
 
-	const limitNum = Math.max(1, Math.min(Number(limit) || 10, 100)); 
+	const limitNum = Math.max(1, Math.min(Number(limit) || 10, 100));
 	const offsetNum = Math.max(0, Number(offset) || 0);
 
 	let courses = readDB(CATALOG);
@@ -64,7 +41,12 @@ router.get('/', (req, res) => {
 		courses = courses.filter((c) => ci(c.Subject, needle));
 	}
 
-	// level 
+	// catalogNbr (exact match)
+	if (catalogNbr && catalogNbr.trim()) {
+		courses = courses.filter((c) => c.CatalogNbr === catalogNbr.trim());
+	}
+
+	// level
 	if (level && level.trim()) {
 		const needle = level.trim().toLowerCase();
 		courses = courses.filter((c) => ci(c.Level, needle));
@@ -78,12 +60,10 @@ router.get('/', (req, res) => {
 		}
 	}
 
-    // instructor (might be better to just not honestly)
-    	if (instructor && instructor.trim()) {
+	// instructor (might be better to just not honestly)
+	if (instructor && instructor.trim()) {
 		const needle = instructor.trim().toLowerCase();
-		courses = courses.filter((c) =>
-			(c.classTimes ?? []).some((ct) => ci(ct.instructor, needle))
-		);
+		courses = courses.filter((c) => (c.classTimes ?? []).some((ct) => ci(ct.instructor, needle)));
 	}
 
 	// status
@@ -92,7 +72,7 @@ router.get('/', (req, res) => {
 		courses = courses.filter((c) => ci(c.overallStatus, needle));
 	}
 
-	// pagination 
+	// pagination
 	const total = courses.length;
 	const paginated = courses.slice(offsetNum, offsetNum + limitNum);
 
@@ -104,7 +84,7 @@ router.get('/', (req, res) => {
 	});
 });
 
-// GET /api/courses/:id  
+// GET /api/courses/:id
 router.get('/:id', (req, res) => {
 	const courses = readDB(CATALOG);
 
@@ -116,6 +96,22 @@ router.get('/:id', (req, res) => {
 	if (!course) return res.status(404).json({ error: 'Course not found', id: rawId });
 
 	res.json({ id: courseId(course), ...course });
+});
+
+// GET /api/courses/filters?q=...&subject=...
+router.get('/filters', (req, res) => {
+	const { q, subject } = req.query;
+	const courses = readDB(CATALOG);
+
+	if (subject?.trim()) courses = courses.filter((course) => course.Subject === subject.trim());
+	if (q?.trim()) courses = courses.filter((course) => courseSearchBlob(course).includes(q.trim().toLowerCase()));
+
+	const filters = {};
+	for (const course of courses) {
+		if (!filters[course.Subject]) filters[course.Subject] = { long_title: course.Subject, course_numbers: [] };
+		if (!filters[course.Subject].course_numbers.includes(c.CatalogNbr)) filters[course.Subject].course_numbers.push(course.CatalogNbr);
+	}
+	res.json(filters);
 });
 
 module.exports = router;

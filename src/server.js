@@ -1,9 +1,14 @@
-require('dotenv').config;
+require('dotenv').config();
 const express = require('express');
 const express_layouts = require('express-ejs-layouts');
 const app = express();
+const path = require('path');
+
+const { readDB } = require('./utils/db');
+const { parse_section_id } = require('./utils/utils');
 
 const port = process.env.PORT ?? 3000;
+const CATALOG = path.join(__dirname, './db/catalog.json');
 
 // Routes
 const coursesRoutes = require('./routes/courses');
@@ -23,32 +28,16 @@ app.use('/api/courses', coursesRoutes);
 app.use('/api/students', studentsRoutes);
 app.use('/api/overrides', overridesRoutes);
 
-const search_filters = {
-	CS: {
-		long_title: 'CS - Computer Science',
-		course_numbers: ['136', '136L', '105', '205', '305', '249'],
-	},
-};
-
-// FIXME Yall do this however yall want, just a temp placeholder :3
-const all_courses = {
-	'CS 136': {
-		subject: 'CS',
-		course_nbr: '136',
-		title: 'C Programming',
-		sections: { 36780: { data: {} } },
-	},
-};
-
-// FIXME Same for here, these are just here so I can test, but yall do whatever yall want with this as long as it works
 app.get('/', (req, res) => {
-	res.render('pages/catalog', { title: 'Catalog', search_filters });
+	res.render('pages/catalog', { title: 'Catalog' });
 });
 app.get('/course/:section_id', (req, res) => {
 	const { section_id } = req.params;
-	const course_key = Object.keys(all_courses).find((course_key) => Object.keys(all_courses[course_key].sections).find((section_key) => section_key === section_id) !== undefined);
-	const course = all_courses[course_key];
-	const section = Object.entries(course).find(([section_key]) => section_key === section_id)[1];
+	const { course_subject, course_nbr, section_nbr } = parse_section_id(section_id);
+
+	const catalog = readDB(CATALOG);
+	const course = catalog.find((course) => course.Subject === course_subject && course.CatalogNbr === course_nbr);
+	const section = course.classTimes.find((time) => time.sectionNumber === section_nbr);
 
 	res.render('pages/course_details', { title: course.title, course, section });
 });
