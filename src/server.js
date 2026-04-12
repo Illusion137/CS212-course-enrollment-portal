@@ -8,7 +8,7 @@ const { readDB } = require('./utils/db');
 const { parse_section_id } = require('./utils/utils');
 
 const port = process.env.PORT ?? 3000;
-const CATALOG = path.join(__dirname, './db/catalog.json');
+const CATALOG = path.join(__dirname, './db/courses.json');
 
 // Routes
 const coursesRoutes = require('./routes/courses');
