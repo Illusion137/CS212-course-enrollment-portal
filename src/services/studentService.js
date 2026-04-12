@@ -81,10 +81,14 @@ function addToWaitlist(studentId, courseId) {
 
 	if (!student || !course) throw new Error('Not found');
 
+	if (!student.waitlistedCourses.includes(courseId)) {
+	student.waitlistedCourses.push(courseId);
+	}
+
 	if (!course.waitlist.includes(studentId)) {
 		course.waitlist.push(studentId);
 	}
-
+	
 	notify(student, `Added to waitlist for ${course.title}`);
 
 	studentModel.saveStudents(students);
