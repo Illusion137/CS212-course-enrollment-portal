@@ -5,7 +5,7 @@ function only_i(word) {
 function uppercase_to_pascal_case(str) {
 	return str
 		.split(' ')
-		.map((word) => (only_i ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1).toLowerCase()))
+		.map((word) => (only_i(word) ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1).toLowerCase()))
 		.join(' ');
 }
 
