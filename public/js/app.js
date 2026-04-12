@@ -16,15 +16,16 @@ function create_section_id(course_subject, course_nbr, section_nbr) {
 // Much taken from https://github.com/Illusion137/Louis (my repo)
 function parse_time(str) {
 	const [time, period] = str.trim().split(' ');
-	let [h, m] = time.split(':').map(Number);
-	if (period === 'PM' && h !== 12) h += 12;
-	if (period === 'AM' && h === 12) h = 0;
-	return h * 60 + m;
+	let [hour, minute] = time.split(':').map(Number);
+	if (period === 'PM' && hour !== 12) hour += 12;
+	if (period === 'AM' && hour === 12) hour = 0;
+	return hour * 60 + minute;
 }
 
 function parse_days(str) {
 	const map = { M: 'Mon', T: 'Tue', W: 'Wed', R: 'Thu', F: 'Fri', S: 'Sat', U: 'Sun' };
-	return [...str].map((c) => map[c]).filter(Boolean);
+	const char_array = [...str.trim()];
+	return char_array.map((char) => map[char]).filter((char) => char);
 }
 
 // From Illusion137/Rui
@@ -86,6 +87,6 @@ function haversine_distance(lat1, lng1, lat2, lng2) {
 
 function time_between_buildings(mode, coords1, coords2) {
 	const km = haversine_distance(coords1.lat, coords1.lng, coords2.lat, coords2.lng);
-	const speeds = { walk: 4.5 / 60, bike: 18.0 / 60, bus: 39.0 / 60 };
+	const speeds = { walk: 4.2 / 60, bike: 18.0 / 60, bus: 39.0 / 60 };
 	return km / speeds[mode];
 }
