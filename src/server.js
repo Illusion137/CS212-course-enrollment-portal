@@ -5,6 +5,11 @@ const app = express();
 
 const port = process.env.PORT ?? 3000;
 
+// Routes
+const coursesRoutes = require('./routes/courses');
+const studentsRoutes = require('./routes/students');
+const overridesRoutes = require('./routes/overrides');
+
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -12,6 +17,11 @@ app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main');
 app.set('layout extractScripts', true);
 app.use(express_layouts);
+
+// API routes
+app.use('/api/courses', coursesRoutes);
+app.use('/api/students', studentsRoutes);
+app.use('/api/overrides', overridesRoutes);
 
 const search_filters = {
 	CS: {
