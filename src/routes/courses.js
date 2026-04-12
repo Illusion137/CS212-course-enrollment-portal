@@ -1,23 +1,121 @@
 const express = require('express');
 const router = express.Router();
+const { readDB } = require('../utils/db');
+const path = require('path');
 
-//GET /api/courses?limit=&offset=
+const CATALOG = path.join(__dirname, '../../tmp/data/parsed_catalog.json');
+
+
+function courseId(course) {
+	return `${course.Subject}-${course.CatalogNbr}`;
+}
+
+function ci(haystack, needle) {
+	return String(haystack ?? '').toLowerCase().includes(needle.toLowerCase());
+}
+
+
+function courseSearchBlob(course) {
+	const instructors = (course.classTimes ?? []).map((ct) => ct.instructor).join(' ');
+	const prereqText = course.parsedPrerequisites
+		? [...(course.parsedPrerequisites.prerequisites ?? []), ...(course.parsedPrerequisites.corequisites ?? [])].join(' ')
+		: '';
+	return [
+		course.Subject,
+		course.CatalogNbr,
+		course.Title,
+		course.LongTitle,
+		course.Description,
+		course.Level,
+		course.Materials,
+		instructors,
+		prereqText,
+	]
+		.join(' ')
+		.toLowerCase();
+}
+
+// GET /api/courses with parameters
 router.get('/', (req, res) => {
-	const { limit = 10, offset = 0 } = req.query;
-	const courses = readDB(COURSES_DB);
+	const {
+		q,
+		subject,
+		instructor,
+		level,
+		credits,
+		status,
+		limit = 10,
+		offset = 0,
+	} = req.query;
 
-	const paginated = courses.slice(Number(offset), Number(offset) + Number(limit));
-	res.json(paginated);
+	const limitNum = Math.max(1, Math.min(Number(limit) || 10, 100)); 
+	const offsetNum = Math.max(0, Number(offset) || 0);
+
+	let courses = readDB(CATALOG);
+
+	if (q && q.trim()) {
+		const needle = q.trim().toLowerCase();
+		courses = courses.filter((c) => courseSearchBlob(c).includes(needle));
+	}
+
+	// subject
+	if (subject && subject.trim()) {
+		const needle = subject.trim().toLowerCase();
+		courses = courses.filter((c) => ci(c.Subject, needle));
+	}
+
+	// level 
+	if (level && level.trim()) {
+		const needle = level.trim().toLowerCase();
+		courses = courses.filter((c) => ci(c.Level, needle));
+	}
+
+	// credits
+	if (credits !== undefined && credits !== '') {
+		const creditNum = Number(credits);
+		if (!isNaN(creditNum)) {
+			courses = courses.filter((c) => c.Credits === creditNum);
+		}
+	}
+
+    // instructor (might be better to just not honestly)
+    	if (instructor && instructor.trim()) {
+		const needle = instructor.trim().toLowerCase();
+		courses = courses.filter((c) =>
+			(c.classTimes ?? []).some((ct) => ci(ct.instructor, needle))
+		);
+	}
+
+	// status
+	if (status && status.trim()) {
+		const needle = status.trim().toLowerCase();
+		courses = courses.filter((c) => ci(c.overallStatus, needle));
+	}
+
+	// pagination 
+	const total = courses.length;
+	const paginated = courses.slice(offsetNum, offsetNum + limitNum);
+
+	res.json({
+		total,
+		limit: limitNum,
+		offset: offsetNum,
+		courses: paginated.map((c) => ({ id: courseId(c), ...c })),
+	});
 });
 
-//GET /api/courses/:id
+// GET /api/courses/:id  
 router.get('/:id', (req, res) => {
-	const courses = readDB(COURSES_DB);
-	const course = courses.find((c) => c.id === req.params.id);
+	const courses = readDB(CATALOG);
 
-	if (!course) return res.status(404).json({ message: 'Course not found' });
+	const rawId = req.params.id.trim();
+	const normalised = rawId.replace(/[_ ]+/, '-').toUpperCase(); // supports Spaces and hyphens
 
-	res.json(course);
+	const course = courses.find((c) => courseId(c).toUpperCase() === normalised);
+
+	if (!course) return res.status(404).json({ error: 'Course not found', id: rawId });
+
+	res.json({ id: courseId(course), ...course });
 });
 
 module.exports = router;
