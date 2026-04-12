@@ -20,8 +20,33 @@ const search_filters = {
 	},
 };
 
+// FIXME Yall do this however yall want, just a temp placeholder :3
+const all_courses = {
+	'CS 136': {
+		title: 'C Programming',
+	},
+};
+
+// FIXME Same for here, these are just here so I can test, but yall do whatever yall want with this as long as it works
 app.use('/', (req, res) => {
-	res.status(404).render('pages/catalog', { title: 'Catalog', search_filters });
+	res.render('pages/catalog', { title: 'Catalog', search_filters });
+});
+app.use('/course/:course_id', (req, res) => {
+	const { course_id } = req.params;
+	const course = all_courses[course_id];
+	res.render('pages/catalog', { title: 'Catalog', course });
+});
+app.use('/view-courses', (req, res) => {
+	res.render('pages/view_courses', { title: 'View Courses' });
+});
+app.use('/manage-courses', (req, res) => {
+	res.render('pages/manage_courses', { title: 'Manage Courses' });
+});
+app.use('/notifications', (req, res) => {
+	res.render('pages/notifications', { title: 'Notifications' });
+});
+app.use('/override', (req, res) => {
+	res.render('pages/override', { title: 'Course Override' });
 });
 app.use((req, res) => {
 	res.status(404).render('pages/not_found', { title: 'Not Found' });
