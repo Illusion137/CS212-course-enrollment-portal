@@ -3,3 +3,4 @@ node_modules
 package-lock.json
 views_old
 src/db/*.json
+scripts/*.js

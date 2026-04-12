@@ -1,47 +1,35 @@
-<div class="m-5">
-	<div class="bg-gradient bg-light-subtle">
-		<input type="text" placeholder="Search" class="form-control" />
-		<div class="input-group">
-			<span class="input-group-text">Subject</span>
+<div class="catalog-outer">
+	<div class="catalog-panel bg-light bg-gradient rounded">
+		<input type="text" id="search-input" placeholder="Search" class="form-control" />
+		<div class="d-flex flex-column flex-md-row gap-2 mt-2">
 			<div class="dropdown">
-				<button id="subject-btn" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Subject</button>
-				<ul class="dropdown-menu">
-					<% Object.keys(search_filters).forEach(key => { %>
-					<li><button type="button" class="dropdown-item" data-subject="<%= key %>"><%= search_filters[key].long_title %></button></li>
-					<% }) %>
-				</ul>
+				<button id="subject-btn" class="btn btn-secondary dropdown-toggle catalog-filter-btn btn-lightish" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Subject</button>
+				<ul id="subject-dropdown-list" class="dropdown-menu" style="max-height: 300px; overflow-y: auto"></ul>
+			</div>
+			<div class="dropdown">
+				<button id="course-nbr-btn" class="btn btn-secondary dropdown-toggle catalog-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>Select Course</button>
+				<ul id="course-nbr-dropdown-list" class="dropdown-menu" style="max-height: 300px; overflow-y: auto"></ul>
 			</div>
 		</div>
-		<div class="input-group">
-			<span class="input-group-text">Course Number</span>
+		<div class="d-flex flex-column flex-md-row flex-wrap gap-2 mt-2">
 			<div class="dropdown">
-				<button id="course-num-btn" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>Select Course</button>
-				<ul id="course-num-menu" class="dropdown-menu"></ul>
+				<button id="status-btn" class="btn btn-secondary dropdown-toggle catalog-filter-btn btn-lightish" type="button" data-bs-toggle="dropdown" aria-expanded="false">Status</button>
+				<ul id="status-dropdown-list" class="dropdown-menu"></ul>
 			</div>
+			<div class="dropdown">
+				<button id="level-btn" class="btn btn-secondary dropdown-toggle catalog-filter-btn btn-lightish" type="button" data-bs-toggle="dropdown" aria-expanded="false">Level</button>
+				<ul id="level-dropdown-list" class="dropdown-menu"></ul>
+			</div>
+			<div class="dropdown">
+				<button id="credits-btn" class="btn btn-secondary dropdown-toggle catalog-filter-btn btn-lightish" type="button" data-bs-toggle="dropdown" aria-expanded="false">Credits</button>
+				<ul id="credits-dropdown-list" class="dropdown-menu" style="max-height: 300px; overflow-y: auto"></ul>
+			</div>
+			<input type="text" id="instructor-input" placeholder="Instructor" class="form-control catalog-instructor-input" />
 		</div>
 	</div>
-	<%- include('../partials/course_list', { courses: typeof courses !== 'undefined' ? courses : {} }) %>
+	<div id="course-list" class="mt-4">
+		<p class="text-muted">No courses to display.</p>
+	</div>
+	<button id="load-more-btn" class="btn btn-outline-secondary w-100 mt-3" style="display: none">Load More</button>
 </div>
-
-<script>
-	$(function () {
-		const search_filters = <%- JSON.stringify(search_filters) %>;
-
-		$('.dropdown-item[data-subject]').on('click', function () {
-			const key = $(this).data('subject');
-			$('#subject-btn').text($(this).text());
-
-			const courses = search_filters[key].course_numbers;
-			const $menu = $('#course-num-menu');
-			$menu.empty();
-			courses.forEach(num => {
-				$menu.append(`<li><button type="button" class="dropdown-item" data-course="${num}">${key} ${num}</button></li>`);
-			});
-			$('#course-num-btn').prop('disabled', false).text('Select Course');
-		});
-
-		$('#course-num-menu').on('click', '.dropdown-item', function () {
-			$('#course-num-btn').text($(this).text());
-		});
-	});
-</script>
+<script src="/js/catalog.js"></script>

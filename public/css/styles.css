@@ -13,3 +13,66 @@
 		display: block;
 	}
 }
+
+.catalog-outer {
+	margin: 0.75rem;
+}
+.catalog-panel {
+	padding: 1rem;
+}
+.catalog-filter-btn {
+	width: 100%;
+}
+.catalog-instructor-input {
+	width: 100%;
+}
+
+@media (min-width: 576px) {
+	.catalog-outer {
+		margin: 1rem;
+	}
+	.catalog-panel {
+		padding: 1.5rem;
+	}
+}
+
+@media (min-width: 768px) {
+	.catalog-filter-btn {
+		width: auto;
+	}
+	.catalog-instructor-input {
+		max-width: 200px;
+	}
+}
+
+@media (min-width: 992px) {
+	.catalog-outer {
+		margin: 1rem;
+	}
+	.catalog-panel {
+		padding: 1rem;
+	}
+}
+
+.course-item {
+	border-bottom: 1px solid #dee2e6;
+	padding-bottom: 0.75rem;
+}
+.course-section-label {
+	width: 125px;
+	max-width: 125px;
+}
+.course-item-header {
+	cursor: pointer;
+}
+.course-item-header:hover > h5 {
+	text-decoration: underline;
+}
+.course-section-scroll {
+	overflow-x: auto;
+}
+.course-section-table .course-section-label {
+	border-right: 1px solid #ccc;
+	padding-right: 1rem;
+	font-weight: bold;
+}

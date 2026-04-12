@@ -1,6 +1,91 @@
+function only_i(word) {
+	return /^i+$/.test(word.toLowerCase());
+}
+
 function uppercase_to_pascal_case(str) {
 	return str
 		.split(' ')
-		.map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+		.map((word) => (only_i ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1).toLowerCase()))
 		.join(' ');
+}
+
+function create_section_id(course_subject, course_nbr, section_nbr) {
+	return `${course_subject}|${course_nbr}|${section_nbr}`;
+}
+
+// Much taken from https://github.com/Illusion137/Louis (my repo)
+function parse_time(str) {
+	const [time, period] = str.trim().split(' ');
+	let [h, m] = time.split(':').map(Number);
+	if (period === 'PM' && h !== 12) h += 12;
+	if (period === 'AM' && h === 12) h = 0;
+	return h * 60 + m;
+}
+
+function parse_days(str) {
+	const map = { M: 'Mon', T: 'Tue', W: 'Wed', R: 'Thu', F: 'Fri', S: 'Sat', U: 'Sun' };
+	return [...str].map((c) => map[c]).filter(Boolean);
+}
+
+// From Illusion137/Rui
+const BUILDING_COORDS = {
+	'Southwest Forest Sci': { lat: 35.17620348343843, lng: -111.65743281804009 },
+	Engineering: { lat: 35.1772613565739, lng: -111.65705478852685 },
+	'SBS West': { lat: 35.17797220958298, lng: -111.65845282199744 },
+	'SBS-Raul H. Castro': { lat: 35.17814319259122, lng: -111.65762748058481 },
+	'W.A.FrankeCollBusiness': { lat: 35.17871520586243, lng: -111.65696188264731 },
+	'Learning Resource Ctr': { lat: 35.178951471038616, lng: -111.65616696856311 },
+	'Babbitt Administrative': { lat: 35.18012186565375, lng: -111.65778950456982 },
+	'Bilby Research Center': { lat: 35.1823704379745, lng: -111.6552217562143 },
+	'Anthropology Laboratory': { lat: 35.18367146989086, lng: -111.65420734372574 },
+	'International Pavilion': { lat: 35.18338069517848, lng: -111.65640110260169 },
+	'Applied Research': { lat: 35.185290018101455, lng: -111.65810691302507 },
+	'Information Systems': { lat: 35.18631876125533, lng: -111.65769922775597 },
+	SICCS: { lat: 35.186197978321445, lng: -111.65844325337207 },
+	'Gateway Student Success': { lat: 35.18660757013335, lng: -111.65459268606479 },
+	'Student Academic Serv': { lat: 35.187571829580605, lng: -111.65399435890684 },
+	'Ardrey Auditorium': { lat: 35.188042272870895, lng: -111.65764992542421 },
+	'Kitt School of Music': { lat: 35.18870158515072, lng: -111.65790875231755 },
+	'Clifford White Theater': { lat: 35.18860543577643, lng: -111.65757597488326 },
+	'HRM Hughes East': { lat: 35.18928332688236, lng: -111.65297932552701 },
+	'NAU Health & Learning': { lat: 35.18917304132804, lng: -111.65204174781222 },
+	'Babbitt Academic Annex': { lat: 35.190586604010214, lng: -111.65446951547868 },
+	'Academic Annex': { lat: 35.19077611967518, lng: -111.6541638323104 },
+	'Adel Mathematics': { lat: 35.19062967579186, lng: -111.65619469297972 },
+	'Cline Library': { lat: 35.18984017271349, lng: -111.65762211257925 },
+	'College of Education': { lat: 35.19122659901538, lng: -111.65794079474891 },
+	'School of Communication': { lat: 35.19166361245103, lng: -111.65582546099543 },
+	'Geology Annex': { lat: 35.19209623304888, lng: -111.65711581522086 },
+	WETTAW: { lat: 35.19296547467282, lng: -111.65327453952752 },
+	'Science Annex': { lat: 35.192213971663776, lng: -111.65291619689295 },
+	'Science Laboratory': { lat: 35.19233680600876, lng: -111.65419441868744 },
+	'Biological Sciences Annex': { lat: 35.191138145519325, lng: -111.65357801851151 },
+	'Science and Health': { lat: 35.19140894148339, lng: -111.65492799245023 },
+	'Department of English': { lat: 35.19158525882302, lng: -111.65395723776717 },
+	'Liberal Arts': { lat: 35.19146568693629, lng: -111.65399317444027 },
+	'Physical Sciences': { lat: 35.19221877711133, lng: -111.65368257890833 },
+	'Chemistry & Biochemistry': { lat: 35.191453307966235, lng: -111.65460277564203 },
+};
+
+function get_building_coords(room_str) {
+	if (!room_str || room_str === 'TBA' || room_str === 'Online') return null;
+	for (const key of Object.keys(BUILDING_COORDS)) {
+		if (room_str.startsWith(key) || room_str.includes(key)) return { key, ...BUILDING_COORDS[key] };
+	}
+	return null;
+}
+
+const RAD_TO_DEG = Math.PI / 180;
+const EARTH_RADIUS_KM = 6371.0;
+function haversine_distance(lat1, lng1, lat2, lng2) {
+	const dlat = (lat2 - lat1) * RAD_TO_DEG;
+	const dlon = (lng2 - lng1) * RAD_TO_DEG;
+	const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1 * RAD_TO_DEG) * Math.cos(lat2 * RAD_TO_DEG) * Math.sin(dlon / 2) ** 2;
+	return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function time_between_buildings(mode, coords1, coords2) {
+	const km = haversine_distance(coords1.lat, coords1.lng, coords2.lat, coords2.lng);
+	const speeds = { walk: 4.5 / 60, bike: 18.0 / 60, bus: 39.0 / 60 };
+	return km / speeds[mode];
 }
