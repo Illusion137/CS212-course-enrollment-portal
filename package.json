@@ -78,6 +78,7 @@
     "dequal": "^2.0.3",
     "destroy": "^1.2.0",
     "detect-libc": "^2.1.2",
+    "dev": "nodemon server.js",
     "devcert": "^1.2.3",
     "devlop": "^1.1.0",
     "discontinuous-range": "^1.0.0",
