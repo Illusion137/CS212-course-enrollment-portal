@@ -2,3 +2,4 @@ node_modules
 .env
 package-lock.json
 views_old
+src/db/*.json
