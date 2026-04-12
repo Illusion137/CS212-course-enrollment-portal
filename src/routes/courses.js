@@ -84,6 +84,22 @@ router.get('/', (req, res) => {
 	});
 });
 
+// GET /api/courses/filters?q=...&subject=...
+router.get('/filters', (req, res) => {
+	const { q, subject } = req.query;
+	const courses = readDB(CATALOG);
+
+	if (subject?.trim()) courses = courses.filter((course) => course.Subject === subject.trim());
+	if (q?.trim()) courses = courses.filter((course) => courseSearchBlob(course).includes(q.trim().toLowerCase()));
+
+	const filters = {};
+	for (const course of courses) {
+		if (!filters[course.Subject]) filters[course.Subject] = { long_title: course.Subject, course_numbers: [] };
+		if (!filters[course.Subject].course_numbers.includes(course.CatalogNbr)) filters[course.Subject].course_numbers.push(course.CatalogNbr);
+	}
+	res.json(filters);
+});
+
 // GET /api/courses/:id
 router.get('/:id', (req, res) => {
 	const courses = readDB(CATALOG);
@@ -96,22 +112,6 @@ router.get('/:id', (req, res) => {
 	if (!course) return res.status(404).json({ error: 'Course not found', id: rawId });
 
 	res.json({ id: courseId(course), ...course });
-});
-
-// GET /api/courses/filters?q=...&subject=...
-router.get('/filters', (req, res) => {
-	const { q, subject } = req.query;
-	const courses = readDB(CATALOG);
-
-	if (subject?.trim()) courses = courses.filter((course) => course.Subject === subject.trim());
-	if (q?.trim()) courses = courses.filter((course) => courseSearchBlob(course).includes(q.trim().toLowerCase()));
-
-	const filters = {};
-	for (const course of courses) {
-		if (!filters[course.Subject]) filters[course.Subject] = { long_title: course.Subject, course_numbers: [] };
-		if (!filters[course.Subject].course_numbers.includes(c.CatalogNbr)) filters[course.Subject].course_numbers.push(course.CatalogNbr);
-	}
-	res.json(filters);
 });
 
 module.exports = router;
