@@ -1,30 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const { readDB, writeDB } = require('../utils/db');
 
-const OVERRIDES_DB = '../db/overrides.json';
+const overrideService = require('../services/overrideService');
 
-// Submit override
+// submit override
 router.post('/', (req, res) => {
-	const overrides = readDB(OVERRIDES_DB);
-
-	const newRequest = {
-		id: overrides.length,
-		...req.body,
-		date: new Date().toISOString(),
-	};
-
-	overrides.push(newRequest);
-
-	writeDB(OVERRIDES_DB, overrides);
-
-	res.json({ success: true });
+	try {
+		const newOverride = overrideService.createOverride(req.body);
+		res.json({ success: true, data: newOverride });
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
 });
 
-// Get all
+// get all overrides
 router.get('/', (req, res) => {
-	const overrides = readDB(OVERRIDES_DB);
-	res.json(overrides);
+	try {
+		const overrides = overrideService.getAllOverrides();
+		res.json(overrides);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 module.exports = router;
