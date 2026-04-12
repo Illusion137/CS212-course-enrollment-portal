@@ -26,11 +26,7 @@ const all_courses = {
 		subject: 'CS',
 		course_nbr: '136',
 		title: 'C Programming',
-	},
-};
-const all_course_sections = {
-	36780: {
-		course: all_courses['CS 136'],
+		sections: { 36780: { data: {} } },
 	},
 };
 
@@ -40,8 +36,11 @@ app.get('/', (req, res) => {
 });
 app.get('/course/:section_id', (req, res) => {
 	const { section_id } = req.params;
-	const section = all_course_sections[section_id];
-	res.render('pages/course_details', { title: section.course.title, section });
+	const course_key = Object.keys(all_courses).find((course_key) => Object.keys(all_courses[course_key].sections).find((section_key) => section_key === section_id) !== undefined);
+	const course = all_courses[course_key];
+	const section = Object.entries(course).find(([section_key]) => section_key === section_id)[1];
+
+	res.render('pages/course_details', { title: course.title, course, section });
 });
 app.get('/view-courses', (req, res) => {
 	res.render('pages/view_courses', { title: 'View Courses' });
