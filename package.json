@@ -5,7 +5,8 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node src/server.js",
 		"dev": "nodemon src/server.js",
-		"build": "sh scripts/zip.sh"
+		"build": "sh scripts/build.sh",
+		"zip": "sh scripts/zip.sh"
 	},
 	"description": "NAU Course Enrollment Portal",
 	"homepage": "https://github.com/Illusion137/CS212-course-enrollment-portal#readme",
