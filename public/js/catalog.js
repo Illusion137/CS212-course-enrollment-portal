@@ -221,7 +221,11 @@ function render_course(course) {
 
 function fetch_courses(append) {
 	const search_query = $('#search-input').val().trim();
-	if (!current_subject && !search_query && !current_status && !current_level && current_credits === null && !current_instructor) return;
+	if (!current_subject && !search_query && !current_status && !current_level && current_credits === null && !current_instructor) {
+		$('#course-list').empty();
+		$('#load-more-btn').hide();
+		return;
+	}
 
 	const query_params = new URLSearchParams({ limit: LIMIT, offset: current_offset });
 	if (current_subject) query_params.set('subject', current_subject);

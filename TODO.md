@@ -4,10 +4,10 @@
 
 ## Daniel Tasks
 
--   [ ] Create a reusable Weekly Schedule Viewer component in HTML, and then migrate it into JavaScript by creating a function to insert the HTML anywhere we desire. This component will display the user's current schedule and how adding certain classes will change their schedule.
+-   [x] Create a reusable Weekly Schedule Viewer component in HTML, and then migrate it into JavaScript by creating a function to insert the HTML anywhere we desire. This component will display the user's current schedule and how adding certain classes will change their schedule.
 -   [ ] Create a reusable Course Map component in HTML, and then migrate it into JavaScript by creating a function to insert the HTML anywhere we desire. This component will show the route the student will have to take for each course, and show the locations of the courses during course search.
 -   [x] Create a dynamic layout for the full application that includes the navbar and content for the mobile view, and the navbar, sidebar, and content for the desktop view. Dynamically swapping between them based on screen width.
--   [ ] Create a reusable Course Item List component to show the list of courses that we fetch from the server. Then, integrate it into a Catalog page. The page will have searching and filtering built in.
+-   [x] Create a reusable Course Item List component to show the list of courses that we fetch from the server. Then, integrate it into a Catalog page. The page will have searching and filtering built in.
 -   [ ] Write a deployment script to automatically deploy our app to Azure, potentially integrating it with GitHub Actions.
 
 ## Aaron Tasks
