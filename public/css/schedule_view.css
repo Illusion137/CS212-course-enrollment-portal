@@ -5,6 +5,8 @@
 .schedule-card {
 	overflow: hidden;
 	border: none;
+	display: flex;
+	flex-direction: column;
 }
 .schedule-header-bar {
 	background: #f8f9fc;
@@ -16,6 +18,8 @@
 }
 .schedule-body-wrap {
 	overflow-x: auto;
+	overflow-y: auto;
+	flex: 1;
 }
 .schedule-inner {
 	display: flex;
@@ -92,7 +96,7 @@
 	position: absolute;
 	left: 3px;
 	right: 3px;
-	border-radius: 5px;
+	border-radius: 2px;
 	padding: 4px 7px;
 	overflow-y: auto;
 	overflow-x: hidden;

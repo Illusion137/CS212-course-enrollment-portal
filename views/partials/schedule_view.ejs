@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/schedule_view.css" />
-<div id="schedule-view-component" class="w-100 card shadow-sm schedule-card mb-0" style="min-height: 50vh; height: 50vh">
+<div id="schedule-view-component" class="w-100 card shadow-sm schedule-card mb-0" style="min-height: 50vh; overflow-y: auto">
 	<div class="schedule-header-bar rounded-top">Weekly Schedule</div>
 	<div class="schedule-body-wrap">
 		<div class="schedule-inner">
@@ -7,8 +7,8 @@
 				<div class="schedule-time-spacer"></div>
 				<div class="schedule-time-grid">
 					<!-- from 8am to 9pm -->
-					<% for (let h = 8; h <= 21; h++) { %>
-					<div class="schedule-time-label" style="top: <%= (h - 8) * 60 %>px"><%= h < 12 ? h + ':00 AM' : h === 12 ? '12:00 PM' : (h - 12) + ':00 PM' %></div>
+					<% for (let hour = 8; hour <= 21; hour++) { %>
+					<div class="schedule-time-label" style="top: <%= (hour - 8) * 60 %>px"><%= hour < 12 ? hour + ':00 AM' : hour === 12 ? '12:00 PM' : (hour - 12) + ':00 PM' %></div>
 					<% } %>
 				</div>
 			</div>
@@ -17,10 +17,10 @@
 				<div class="schedule-day-col">
 					<div class="schedule-day-header"><%= day %></div>
 					<div class="schedule-day-body" data-day="<%= day %>">
-						<% for (let h = 0; h <= 13; h++) { %>
-						<div class="schedule-hour-line" style="top: <%= h * 60 %>px"></div>
-						<% if (h < 13) { %>
-						<div class="schedule-half-line" style="top: <%= h * 60 + 30 %>px"></div>
+						<% for (let hour = 0; hour <= 13; hour++) { %>
+						<div class="schedule-hour-line" style="top: <%= hour * 60 %>px"></div>
+						<% if (hour < 13) { %>
+						<div class="schedule-half-line" style="top: <%= hour * 60 + 30 %>px"></div>
 						<% } %> <% } %>
 					</div>
 				</div>
