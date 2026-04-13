@@ -61,7 +61,7 @@ function add_building_marker(building, index) {
 	const color = BUILDING_COLOR_MAP[building.coords.key] || DEFAULT_COLOR;
 	const popup = $('<div>').append(
 		$('<strong>').css('font-size', '15px').text(building.coords.key),
-		$.map(building.courses, (course) => $('<div>').css({ 'font-size': '13px', 'margin-top': '3px', color: '#444' }).text(course.label))
+		building.courses.map((course) => $('<div>').css({ 'font-size': '13px', 'margin-top': '3px', color: '#444' }).text(course.label))
 	);
 	const marker = L.marker([building.coords.lat, building.coords.lng], { icon: make_pin_icon(color, index === 0 ? 2 : 0.5) });
 	marker.bindPopup(popup[0], { maxWidth: 220 }).addTo(campus_map);
@@ -148,9 +148,10 @@ function render_course_map(courses) {
 	}
 
 	const active_days = DAYS_LIST.filter((day) => courses.some((course) => course.days && course.days.includes(day)));
+	const mapped_tabs = active_days.map((day) => ({ day, label: DAY_KEY_LABELS[day] }));
 
 	const map_day_tabs = $('#map-day-tabs').empty();
-	const tabs_data = [{ day: null, label: 'All' }].concat($.map(active_days, (d) => ({ day: d, label: DAY_KEY_LABELS[d] })));
+	const tabs_data = [{ day: null, label: 'All' }].concat(mapped_tabs);
 	for (const tab of tabs_data) {
 		map_day_tabs.append(make_day_tab(tab));
 	}

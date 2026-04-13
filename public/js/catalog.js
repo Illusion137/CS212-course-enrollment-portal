@@ -52,12 +52,12 @@ function add_events() {
 			current_catalog_nbr = null;
 			$('#course-nbr-btn').prop('disabled', false).text('Select Course');
 
-			const $menu = $('#course-nbr-dropdown-list');
-			$menu.empty();
-			$menu.append(`<li><button type="button" class="dropdown-item text-muted" data-course="">Select Course</button></li><li><hr class="dropdown-divider"></li>`);
-			(filters[key]?.course_numbers ?? []).forEach((num) => {
-				$menu.append(`<li><button type="button" class="dropdown-item" data-course="${num}">${key} ${num}</button></li>`);
-			});
+			const course_nbr_dropdown_list = $('#course-nbr-dropdown-list');
+			course_nbr_dropdown_list.empty();
+			course_nbr_dropdown_list.append(`<li><button type="button" class="dropdown-item text-muted" data-course="">Select Course</button></li><li><hr class="dropdown-divider"></li>`);
+			for (const nbr of filters[key]?.course_numbers ?? []) {
+				course_nbr_dropdown_list.append(`<li><button type="button" class="dropdown-item" data-course="${nbr}">${key} ${nbr}</button></li>`);
+			}
 
 			fetch_courses(false);
 		});

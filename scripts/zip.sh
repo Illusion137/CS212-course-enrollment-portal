@@ -1,0 +1,1 @@
+zip -r dist/CS212_Phase1_Codebase.zip . -x '*node_modules*/*' -x '*views_old*/*' -x '*.git*/*'
