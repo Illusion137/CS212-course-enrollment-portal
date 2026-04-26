@@ -23,4 +23,28 @@ router.get('/', (req, res) => {
 	}
 });
 
+// ACCEPT override
+router.post('/accept', (req, res) => {
+	try {
+		const { id } = req.body;
+		const result = overrideService.acceptOverride(id);
+
+		res.json({ success: true, data: result });
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
+});
+
+// DENY override
+router.post('/deny', (req, res) => {
+	try {
+		const { id } = req.body;
+		const result = overrideService.denyOverride(id);
+
+		res.json({ success: true, data: result });
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
+});
+
 module.exports = router;
