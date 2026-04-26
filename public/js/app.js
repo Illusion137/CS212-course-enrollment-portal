@@ -1,3 +1,13 @@
+async function get_student_id() {
+	const STUDENT_ID_KEY = 'STUID';
+	const student_id = localStorage.getItem(STUDENT_ID_KEY);
+	if (student_id) return student_id;
+	// we don't have one; create one for the user.
+	let { new_student_id, error } = await $.post('/api/students/new', {});
+	if (error) return null;
+	localStorage.setItem(STUDENT_ID_KEY, new_student_id);
+}
+
 function only_i(word) {
 	return /^i+$/.test(word.toLowerCase());
 }

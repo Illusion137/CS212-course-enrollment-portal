@@ -4,3 +4,4 @@ package-lock.json
 src/db/*.json
 scripts/*.js
 dist
+.DS_Store
