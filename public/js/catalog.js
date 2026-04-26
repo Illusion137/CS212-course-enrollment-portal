@@ -182,7 +182,7 @@ function render_course(course) {
 			const is_closed = class_time.status === 'Closed';
 			return `<tr id="${section_id(class_time.sectionNumber)}">
 						<th class="text-nowrap${is_closed ? ' text-muted text-decoration-line-through' : ''} course-section-label">
-                            ${is_closed ? `Section ${class_time.sectionNumber}:` : `<a href="/course/${section_id(class_time.sectionNumber)}">Section ${class_time.sectionNumber}:</a>`}
+                            <a href="/course/${section_id(class_time.sectionNumber)}">Section ${class_time.sectionNumber}:</a>
                         </th>
 						<td>${class_time.days || 'TBA'}<br><span class="text-nowrap">${class_time.startTime} - ${class_time.endTime}</span></td>
 						<td class="d-none d-sm-table-cell">${class_time.room || 'TBA'}</td>
