@@ -1,4 +1,5 @@
 const courseModel = require('../models/courseModel');
+const subjectLocations = require('../utils/subjectLocations');
 
 // helpers
 function courseId(course) {
@@ -38,6 +39,19 @@ function courseSearchBlob(course) {
 		.toLowerCase();
 }
 
+function attachLocation(course) {
+	const subjectKey = course.Subject || course.subject; // handle both cases
+
+	if (subjectLocations[subjectKey]) {
+		return {
+			...course,
+			location: subjectLocations[subjectKey].building,
+			coordinates: subjectLocations[subjectKey].coordinates
+		};
+	}
+
+	return course;
+}
 
 // search courses
 function searchCourses(query = {}) {

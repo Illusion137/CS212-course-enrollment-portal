@@ -52,6 +52,26 @@ router.get('/:id/courses', (req, res) => {
 	}
 });
 
+// GET /api/students/:id/notifications
+router.get('/:id/notifications', (req, res) => {
+	try {
+		const notifications = studentService.getNotifications(req.params.id);
+		res.json(notifications);
+	} catch (err) {
+		res.status(404).json({ error: err.message });
+	}
+});
+
+// GET /api/students/:id/notifications/unread
+router.get('/:id/notifications/unread', (req, res) => {
+	try {
+		const count = studentService.getUnreadNotificationCount(req.params.id);
+		res.json({ unread: count });
+	} catch (err) {
+		res.status(404).json({ error: err.message });
+	}
+});
+
 // enroll
 router.post('/:id/courses/:courseId/enroll', (req, res) => {
 	try {
