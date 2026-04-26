@@ -9,7 +9,7 @@ function getAllStudents() {
 
 function getStudentById(id) {
 	const students = readDB(STUDENTS_DB);
-	return students.find(s => s.id === id);
+	return students.find((s) => s.id === id);
 }
 
 function saveStudents(students) {
@@ -18,17 +18,16 @@ function saveStudents(students) {
 // get all notifications for a student
 function getNotifications(id) {
 	const student = getStudentById(id);
-	
+
 	if (!student) {
 		throw new Error('Student not found');
 	}
 
-		return student.notifications || [];
-
+	return student.notifications || [];
 }
 
-// Get unread notification count 
-function getUnreadNotificxationCount(id) {
+// Get unread notification count
+function getUnreadNotificationCount(id) {
 	const student = getStudentByID(id);
 
 	if (!student) {
@@ -37,12 +36,12 @@ function getUnreadNotificxationCount(id) {
 
 	const notifications = student.notifications || [];
 
-	return notifications.filter(n=> !n.read).length
+	return notifications.filter((n) => !n.read).length;
 }
 module.exports = {
 	getAllStudents,
 	getStudentById,
 	saveStudents,
 	getNotifications,
-	getUnreadNotificationCount
+	getUnreadNotificationCount,
 };

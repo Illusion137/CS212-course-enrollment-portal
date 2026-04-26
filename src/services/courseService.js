@@ -1,5 +1,4 @@
 const courseModel = require('../models/courseModel');
-const subjectLocations = require('../utils/subjectLocations');
 
 // helpers
 function courseId(course) {
@@ -13,101 +12,56 @@ function ci(haystack, needle) {
 }
 
 function courseSearchBlob(course) {
-	const instructors = (course.classTimes ?? [])
-		.map(ct => ct.instructor)
-		.join(' ');
+	const instructors = (course.classTimes ?? []).map((ct) => ct.instructor).join(' ');
 
-	const prereqText = course.parsedPrerequisites
-		? [
-				...(course.parsedPrerequisites.prerequisites ?? []),
-				...(course.parsedPrerequisites.corequisites ?? [])
-		  ].join(' ')
-		: '';
+	const prereqText = course.parsedPrerequisites ? [...(course.parsedPrerequisites.prerequisites ?? []), ...(course.parsedPrerequisites.corequisites ?? [])].join(' ') : '';
 
-	return [
-		course.Subject,
-		course.CatalogNbr,
-		course.Title,
-		course.LongTitle,
-		course.Description,
-		course.Level,
-		course.Materials,
-		instructors,
-		prereqText
-	]
-		.join(' ')
-		.toLowerCase();
-}
-
-function attachLocation(course) {
-	const subjectKey = course.Subject || course.subject; // handle both cases
-
-	if (subjectLocations[subjectKey]) {
-		return {
-			...course,
-			location: subjectLocations[subjectKey].building,
-			coordinates: subjectLocations[subjectKey].coordinates
-		};
-	}
-
-	return course;
+	return [course.Subject, course.CatalogNbr, course.Title, course.LongTitle, course.Description, course.Level, course.Materials, instructors, prereqText].join(' ').toLowerCase();
 }
 
 // search courses
 function searchCourses(query = {}) {
 	let courses = courseModel.getAllCourses();
 
-	const {
-		q,
-		subject,
-		catalogNbr,
-		instructor,
-		level,
-		credits,
-		status,
-		limit = 10,
-		offset = 0
-	} = query;
+	const { q, subject, catalogNbr, instructor, level, credits, status, limit = 10, offset = 0 } = query;
 
 	const limitNum = Math.max(1, Math.min(Number(limit) || 10, 100));
 	const offsetNum = Math.max(0, Number(offset) || 0);
 
 	if (q?.trim()) {
 		const needle = q.trim().toLowerCase();
-		courses = courses.filter(c => courseSearchBlob(c).includes(needle));
+		courses = courses.filter((c) => courseSearchBlob(c).includes(needle));
 	}
 
 	if (subject?.trim()) {
-		courses = courses.filter(c => ci(c.Subject, subject));
+		courses = courses.filter((c) => ci(c.Subject, subject));
 	}
 	// course number
 	if (catalogNbr?.trim()) {
-		courses = courses.filter(c => c.CatalogNbr === catalogNbr.trim());
+		courses = courses.filter((c) => c.CatalogNbr === catalogNbr.trim());
 	}
 
 	// level
 	if (level?.trim()) {
-		courses = courses.filter(c => ci(c.Level, level));
+		courses = courses.filter((c) => ci(c.Level, level));
 	}
 
 	// credits
 	if (credits !== undefined && credits !== '') {
 		const creditNum = Number(credits);
 		if (!isNaN(creditNum)) {
-			courses = courses.filter(c => c.Credits === creditNum);
+			courses = courses.filter((c) => c.Credits === creditNum);
 		}
 	}
 
 	// instructor
 	if (instructor?.trim()) {
-		courses = courses.filter(c =>
-			(c.classTimes ?? []).some(ct => ci(ct.instructor, instructor))
-		);
+		courses = courses.filter((c) => (c.classTimes ?? []).some((ct) => ci(ct.instructor, instructor)));
 	}
 
 	// status
 	if (status?.trim()) {
-		courses = courses.filter(c => ci(c.overallStatus, status));
+		courses = courses.filter((c) => ci(c.overallStatus, status));
 	}
 
 	const total = courses.length;
@@ -117,10 +71,10 @@ function searchCourses(query = {}) {
 		total,
 		limit: limitNum,
 		offset: offsetNum,
-		courses: paginated.map(c => ({
+		courses: paginated.map((c) => ({
 			id: courseId(c),
-			...c
-		}))
+			...c,
+		})),
 	};
 }
 
@@ -131,14 +85,12 @@ function getFilters(query = {}) {
 	const { q, subject } = query;
 
 	if (subject?.trim()) {
-		courses = courses.filter(c => c.Subject === subject.trim());
+		courses = courses.filter((c) => c.Subject === subject.trim());
 	}
 
 	if (q?.trim()) {
 		const needle = q.trim().toLowerCase();
-		courses = courses.filter(c =>
-			courseSearchBlob(c).includes(needle)
-		);
+		courses = courses.filter((c) => courseSearchBlob(c).includes(needle));
 	}
 
 	const filters = {};
@@ -147,7 +99,7 @@ function getFilters(query = {}) {
 		if (!filters[course.Subject]) {
 			filters[course.Subject] = {
 				long_title: course.Subject,
-				course_numbers: []
+				course_numbers: [],
 			};
 		}
 
@@ -163,25 +115,20 @@ function getFilters(query = {}) {
 function getCourseById(id) {
 	const courses = courseModel.getAllCourses();
 
-	const normalised = id
-		.trim()
-		.replace(/[_ ]+/, '-')
-		.toUpperCase();
+	const normalised = id.trim().replace(/[_ ]+/, '-').toUpperCase();
 
-	const course = courses.find(
-		c => courseId(c).toUpperCase() === normalised
-	);
+	const course = courses.find((c) => courseId(c).toUpperCase() === normalised);
 
 	if (!course) throw new Error('Course not found');
 
 	return {
 		id: courseId(course),
-		...course
+		...course,
 	};
 }
 
 module.exports = {
 	searchCourses,
 	getFilters,
-	getCourseById
+	getCourseById,
 };
