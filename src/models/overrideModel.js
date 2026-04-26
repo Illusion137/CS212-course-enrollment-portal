@@ -1,50 +1,17 @@
-const express = require('express');
-const router = express.Router();
+const { readDB, writeDB } = require('../utils/db');
+const path = require('path');
 
-const overrideService = require('../services/overrideService');
+const OVERRIDES_DB = path.join(__dirname, '../db/overrides.json');
 
-// submit override
-router.post('/', (req, res) => {
-	try {
-		const newOverride = overrideService.createOverride(req.body);
-		res.json({ success: true, data: newOverride });
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
-});
+function getAllOverrides() {
+	return readDB(OVERRIDES_DB);
+}
 
-// get all overrides
-router.get('/', (req, res) => {
-	try {
-		const overrides = overrideService.getAllOverrides();
-		res.json(overrides);
-	} catch (err) {
-		res.status(500).json({ error: err.message });
-	}
-});
+function saveOverrides(overrides) {
+	writeDB(OVERRIDES_DB, overrides);
+}
 
-// ACCEPT override
-router.post('/accept', (req, res) => {
-	try {
-		const { id } = req.body;
-		const result = overrideService.acceptOverride(id);
-
-		res.json({ success: true, data: result });
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
-});
-
-// ❌ DENY override
-router.post('/deny', (req, res) => {
-	try {
-		const { id } = req.body;
-		const result = overrideService.denyOverride(id);
-
-		res.json({ success: true, data: result });
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
-});
-
-module.exports = router;
+module.exports = {
+	getAllOverrides,
+	saveOverrides
+};
