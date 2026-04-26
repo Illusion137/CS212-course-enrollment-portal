@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const { wait_for, generate_new_student_id } = require('../utils/utils');
 const { readDB, writeDB } = require('../utils/db');
 const { hasConflict } = require('../utils/scheduler');
 
@@ -15,6 +16,21 @@ function notify(student, message) {
 		date: new Date().toISOString(),
 	});
 }
+
+let new_student_locked = false;
+// POST /api/students/new
+router.get('/new', async (req, res) => {
+	try {
+		await wait_for(() => new_student_locked === false);
+		new_student_locked = true;
+		const existing_users_set = new Set(getAllStudents().map((student) => student.id));
+		const new_student_id = generate_new_student_id(existing_users_set);
+		new_student_locked = false;
+		res.json({ new_student_id });
+	} catch (err) {
+		res.status(404).json({ error: err.message });
+	}
+});
 
 // GET /api/students/:id/schedule
 router.get('/:id/schedule', (req, res) => {
