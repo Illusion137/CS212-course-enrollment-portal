@@ -80,3 +80,13 @@
 	padding-right: 16px;
 	font-weight: bold;
 }
+
+.bold {
+	font-weight: bold;
+}
+.required {
+	color: #ff3737 !important;
+}
+.pointer {
+	cursor: pointer;
+}

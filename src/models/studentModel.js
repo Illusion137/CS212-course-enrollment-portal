@@ -38,10 +38,30 @@ function getUnreadNotificationCount(id) {
 
 	return notifications.filter((n) => !n.read).length;
 }
+// Mark a single notification as read
+function markNotificationRead(id, notification_id) {
+	const students = readDB(STUDENTS_DB);
+	const student = students.find((s) => s.id === id);
+
+	if (!student) {
+		throw new Error('Student not found');
+	}
+
+	const notification = (student.notifications || []).find((n) => n.id == notification_id);
+
+	if (!notification) {
+		throw new Error('Notification not found');
+	}
+
+	notification.read = true;
+	writeDB(STUDENTS_DB, students);
+}
+
 module.exports = {
 	getAllStudents,
 	getStudentById,
 	saveStudents,
 	getNotifications,
 	getUnreadNotificationCount,
+	markNotificationRead,
 };

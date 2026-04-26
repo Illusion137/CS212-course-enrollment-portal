@@ -62,6 +62,16 @@ router.get('/:id/notifications', (req, res) => {
 	}
 });
 
+// PATCH /api/students/:id/notifications/:notifId/read
+router.patch('/:id/notifications/:notifId/read', (req, res) => {
+	try {
+		studentService.markNotificationRead(req.params.id, req.params.notifId);
+		res.json({ success: true });
+	} catch (err) {
+		res.status(404).json({ error: err.message });
+	}
+});
+
 // GET /api/students/:id/notifications/unread
 router.get('/:id/notifications/unread', (req, res) => {
 	try {

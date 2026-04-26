@@ -125,6 +125,10 @@ function getNotifications(id) {
 	return studentModel.getNotifications(id);
 }
 
+function markNotificationRead(id, notification_id) {
+	return studentModel.markNotificationRead(id, notification_id);
+}
+
 module.exports = {
 	getAllStudents,
 	getSchedule,
@@ -133,5 +137,6 @@ module.exports = {
 	addToWaitlist,
 	removeFromWaitlist,
 	getNotifications,
+	markNotificationRead,
 	insertStudent,
 };
