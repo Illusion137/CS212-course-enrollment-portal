@@ -6,6 +6,7 @@ async function get_student_id() {
 	let { new_student_id, error } = await $.post('/api/students/new', {});
 	if (error) return null;
 	localStorage.setItem(STUDENT_ID_KEY, new_student_id);
+	return new_student_id;
 }
 
 function only_i(word) {

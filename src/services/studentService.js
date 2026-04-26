@@ -9,6 +9,16 @@ function notify(student, message) {
 	});
 }
 
+function insertStudent(id) {
+	const students = studentModel.getAllStudents();
+	students.push({ id });
+	studentModel.saveStudents(students);
+}
+
+function getAllStudents() {
+	return studentModel.getAllStudents();
+}
+
 // GET student schedule
 function getSchedule(studentId) {
 	const student = studentModel.getStudentById(studentId);
@@ -21,8 +31,8 @@ function enroll(studentId, courseId) {
 	const students = studentModel.getAllStudents();
 	const courses = courseModel.getAllCourses();
 
-	const student = students.find(s => s.id === studentId);
-	const course = courses.find(c => c.id === courseId);
+	const student = students.find((s) => s.id === studentId);
+	const course = courses.find((c) => c.id === courseId);
 
 	if (!student || !course) throw new Error('Not found');
 
@@ -36,7 +46,7 @@ function enroll(studentId, courseId) {
 
 	student.courses.push({
 		courseId: course.id,
-		schedule: course.schedule
+		schedule: course.schedule,
 	});
 
 	course.availableSeats--;
@@ -54,12 +64,12 @@ function drop(studentId, courseId) {
 	const students = studentModel.getAllStudents();
 	const courses = courseModel.getAllCourses();
 
-	const student = students.find(s => s.id === studentId);
-	const course = courses.find(c => c.id === courseId);
+	const student = students.find((s) => s.id === studentId);
+	const course = courses.find((c) => c.id === courseId);
 
 	if (!student || !course) throw new Error('Not found');
 
-	student.courses = student.courses.filter(c => c.courseId !== courseId);
+	student.courses = student.courses.filter((c) => c.courseId !== courseId);
 
 	course.availableSeats++;
 
@@ -76,19 +86,19 @@ function addToWaitlist(studentId, courseId) {
 	const courses = courseModel.getAllCourses();
 	const students = studentModel.getAllStudents();
 
-	const student = students.find(s => s.id === studentId);
-	const course = courses.find(c => c.id === courseId);
+	const student = students.find((s) => s.id === studentId);
+	const course = courses.find((c) => c.id === courseId);
 
 	if (!student || !course) throw new Error('Not found');
 
 	if (!student.waitlistedCourses.includes(courseId)) {
-	student.waitlistedCourses.push(courseId);
+		student.waitlistedCourses.push(courseId);
 	}
 
 	if (!course.waitlist.includes(studentId)) {
 		course.waitlist.push(studentId);
 	}
-	
+
 	notify(student, `Added to waitlist for ${course.title}`);
 
 	studentModel.saveStudents(students);
@@ -101,20 +111,27 @@ function addToWaitlist(studentId, courseId) {
 function removeFromWaitlist(studentId, courseId) {
 	const courses = courseModel.getAllCourses();
 
-	const course = courses.find(c => c.id === courseId);
+	const course = courses.find((c) => c.id === courseId);
 	if (!course) throw new Error('Not found');
 
-	course.waitlist = course.waitlist.filter(id => id !== studentId);
+	course.waitlist = course.waitlist.filter((id) => id !== studentId);
 
 	courseModel.saveCourses(courses);
 
 	return true;
 }
 
+function getNotifications(id) {
+	return studentModel.getNotifications(id);
+}
+
 module.exports = {
+	getAllStudents,
 	getSchedule,
 	enroll,
 	drop,
 	addToWaitlist,
-	removeFromWaitlist
+	removeFromWaitlist,
+	getNotifications,
+	insertStudent,
 };

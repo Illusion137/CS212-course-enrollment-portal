@@ -4,7 +4,6 @@ const path = require('path');
 const { wait_for, generate_new_student_id } = require('../utils/utils');
 const { readDB, writeDB } = require('../utils/db');
 const { hasConflict } = require('../utils/scheduler');
-
 const STUDENTS_DB = path.join(__dirname, '../db/students.json');
 const COURSES_DB = path.join(__dirname, '../db/courses.json');
 
@@ -19,12 +18,13 @@ function notify(student, message) {
 
 let new_student_locked = false;
 // POST /api/students/new
-router.get('/new', async (req, res) => {
+router.post('/new', async (req, res) => {
 	try {
 		await wait_for(() => new_student_locked === false);
 		new_student_locked = true;
-		const existing_users_set = new Set(getAllStudents().map((student) => student.id));
+		const existing_users_set = new Set(studentService.getAllStudents().map((student) => student.id));
 		const new_student_id = generate_new_student_id(existing_users_set);
+		studentService.insertStudent(new_student_id);
 		new_student_locked = false;
 		res.json({ new_student_id });
 	} catch (err) {

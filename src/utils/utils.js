@@ -16,10 +16,10 @@ function generate_new_student_id(existing_users_set) {
 	do {
 		let first_part = (Math.random() * 46656) | 0;
 		let second_part = (Math.random() * 46656) | 0;
-		first_part = ('000' + firstPart.toString(36)).slice(-3);
-		second_part = ('000' + secondPart.toString(36)).slice(-3);
+		first_part = ('000' + first_part.toString(36)).slice(-3);
+		second_part = ('000' + second_part.toString(36)).slice(-3);
 		new_student_id = first_part + second_part;
-	} while (!existing_users_set.has(new_student_id));
+	} while (existing_users_set.has(new_student_id));
 	return new_student_id;
 }
 
