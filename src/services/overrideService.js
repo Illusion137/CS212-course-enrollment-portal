@@ -4,7 +4,7 @@ function createOverride(data) {
 	const overrides = overrideModel.getAllOverrides();
 
 	const newRequest = {
-		id: overrides.length, 
+		id: overrides.length,
 		...data,
 		date: new Date().toISOString(),
 	};
@@ -26,7 +26,7 @@ function acceptOverride(id) {
 	const students = studentModel.getAllStudents();
 	const courses = courseModel.getAllCourses();
 
-	const request = overrides.find(o => o.id === id);
+	const request = overrides.find((o) => o.id === id);
 	if (!request) throw new Error('Override not found');
 
 	if (request.status === 'accepted') {
@@ -36,8 +36,8 @@ function acceptOverride(id) {
 		throw new Error('Already denied');
 	}
 
-	const student = students.find(s => s.sid === request.sid);
-	const course = courses.find(c => c.id === request.course_id);
+	const student = students.find((s) => s.sid === request.sid);
+	const course = courses.find((c) => c.id === request.course_id);
 
 	if (!student || !course) {
 		throw new Error('Student or course not found');
@@ -66,8 +66,10 @@ function acceptOverride(id) {
 
 	// notify
 	notificationModel.createNotification({
+		type: 'SUCCESS',
+		title: 'Override Approved!',
 		sid: student.sid,
-		message: `Override APPROVED for course ${course.id}`
+		message: `Override has been aprroved for the course: ${course.id}`,
 	});
 
 	return request;
@@ -77,7 +79,7 @@ function acceptOverride(id) {
 function denyOverride(id) {
 	const overrides = overrideModel.getAllOverrides();
 
-	const request = overrides.find(o => o.id === id);
+	const request = overrides.find((o) => o.id === id);
 	if (!request) throw new Error('Override not found');
 
 	if (request.status === 'accepted') {
@@ -93,8 +95,10 @@ function denyOverride(id) {
 
 	// notify
 	notificationModel.createNotification({
+		type: 'ERROR',
 		sid: request.sid,
-		message: `Override DENIED for course ${request.course_id}`
+		title: 'Override Denied...',
+		message: `Override has been denied for the course: ${request.course_id}`,
 	});
 
 	return request;
@@ -104,5 +108,5 @@ module.exports = {
 	createOverride,
 	getAllOverrides,
 	acceptOverride,
-	denyOverride
+	denyOverride,
 };

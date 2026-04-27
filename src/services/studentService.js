@@ -8,8 +8,9 @@ function find_course(courses, section_id) {
 	return courses.find((course) => course.Subject === course_subject && course.CatalogNbr === course_nbr);
 }
 
-function notify(student, message) {
+function notify(student, title, message, type) {
 	student.notifications.push({
+		type: 'INFO',
 		message,
 		date: new Date().toISOString(),
 	});
@@ -50,7 +51,7 @@ function enroll(studentId, courseId) {
 
 	course.availableSeats--;
 
-	notify(student, `Enrolled in ${course.title}`);
+	notify(student, 'Successful Enrollement', `You are now enrolled in the course: ${course.title}`, 'SUCCESS');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);
@@ -72,7 +73,7 @@ function drop(studentId, courseId) {
 
 	course.availableSeats++;
 
-	notify(student, `Dropped ${course.title}`);
+	notify(student, 'Course Successfully Dropped', `You are no longer in the course: ${course.title}`, 'INFO');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);
@@ -99,7 +100,7 @@ function addToWaitlist(studentId, courseId) {
 		course.waitlist.push(studentId);
 	}
 
-	notify(student, `Added to waitlist for ${course.title}`);
+	notify(student, 'Course added to Waitlist', `You are now waitlisted for the course: ${course.title}`, 'INFO');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);
