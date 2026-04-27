@@ -101,3 +101,17 @@ function time_between_buildings(mode, coords1, coords2) {
 	const speeds = { walk: 4.2 / 60, bike: 18.0 / 60, bus: 39.0 / 60 };
 	return km / speeds[mode];
 }
+
+async function get_section_details(section_id) {
+	const split_id = section_id.split('|');
+	if (split_id.length !== 3) return null;
+	const [subject, catalog_nbr, section_nbr] = split_id;
+	try {
+		const course = await $.getJSON(`/api/courses/${subject}-${catalog_nbr}`);
+		const section = (course.classTimes || []).find((s) => s.sectionNumber === section_nbr);
+		if (!section) return null;
+		return { sectionId: section_id, course, section };
+	} catch (e) {
+		return null;
+	}
+}
