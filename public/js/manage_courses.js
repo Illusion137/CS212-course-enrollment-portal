@@ -22,7 +22,7 @@ function update_visualizers(exclude_hover_id) {
 	render_course_map(visible_courses);
 }
 
-function render_course_item({ sectionId, course }, btn_class, btn_label) {
+function render_course({ sectionId, course }, btn_class, btn_label) {
 	return `<div class="p-2 mb-3 rounded" style="background-color: #eaecec;">
 		<div class="fw-semibold mb-1">${course.Subject} ${course.CatalogNbr} - ${uppercase_to_pascal_case(course.Title)}</div>
 		<button class="btn btn-danger btn-sm ${btn_class}" data-section-id="${sectionId}">${btn_label}</button>
@@ -35,7 +35,7 @@ function render_list(container, courses, btn_class, btn_label) {
 		container.append('<p class="text-muted">No courses.</p>');
 	} else {
 		for (const entry of courses) {
-			container.append(render_course_item(entry, btn_class, btn_label));
+			container.append(render_course(entry, btn_class, btn_label));
 		}
 	}
 }
