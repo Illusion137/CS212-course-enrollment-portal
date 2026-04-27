@@ -108,7 +108,7 @@ async function get_section_details(section_id) {
 	const [subject, catalog_nbr, section_nbr] = split_id;
 	try {
 		const course = await $.getJSON(`/api/courses/${subject}-${catalog_nbr}`);
-		const section = (course.classTimes || []).find((s) => s.sectionNumber === section_nbr);
+		const section = (course.classTimes || []).find((class_time) => class_time.sectionNumber === section_nbr);
 		if (!section) return null;
 		return { sectionId: section_id, course, section };
 	} catch (e) {

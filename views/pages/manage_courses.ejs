@@ -1,1 +1,22 @@
-<div></div>
+<div class="d-flex" style="height: calc(100vh - 70px)">
+	<div class="pt-4 pb-4 flex-grow-1" style="height: calc(100vh - 70px); overflow-y: auto">
+		<div class="px-4 d-flex gap-5">
+			<div class="flex-grow-1">
+				<h5 class="fw-bold text-decoration-underline mb-3">Enrolled Courses</h5>
+				<div id="enrolled-courses-list">
+					<p class="text-muted">Loading...</p>
+				</div>
+			</div>
+			<div class="flex-grow-1">
+				<h5 class="fw-bold text-decoration-underline mb-3">Waitlisted Courses</h5>
+				<div id="waitlisted-courses-list">
+					<p class="text-muted">Loading...</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="border-left pt-4 pb-4 d-flex flex-column gap-4 flex-shrink-0" style="overflow-y: auto; height: calc(100vh - 70px)">
+		<%- include('../partials/schedule_view') %> <%- include('../partials/course_map') %>
+	</div>
+</div>
+<script src="/js/manage_courses.js"></script>
