@@ -10,7 +10,9 @@ function find_course(courses, section_id) {
 
 function notify(student, title, message, type) {
 	student.notifications.push({
-		type: 'INFO',
+		id: student.notifications.length + 1,
+		title,
+		type,
 		message,
 		date: new Date().toISOString(),
 	});
@@ -51,7 +53,7 @@ function enroll(studentId, courseId) {
 
 	course.availableSeats--;
 
-	notify(student, 'Successful Enrollement', `You are now enrolled in the course: ${course.title}`, 'SUCCESS');
+	notify(student, 'Successful Enrollement', `You are now enrolled in the course: ${course.LongTitle}`, 'SUCCESS');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);
@@ -73,7 +75,7 @@ function drop(studentId, courseId) {
 
 	course.availableSeats++;
 
-	notify(student, 'Course Successfully Dropped', `You are no longer in the course: ${course.title}`, 'INFO');
+	notify(student, 'Course Successfully Dropped', `You are no longer in the course: ${course.LongTitle}`, 'INFO');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);
@@ -100,7 +102,7 @@ function addToWaitlist(studentId, courseId) {
 		course.waitlist.push(studentId);
 	}
 
-	notify(student, 'Course added to Waitlist', `You are now waitlisted for the course: ${course.title}`, 'INFO');
+	notify(student, 'Course added to Waitlist', `You are now waitlisted for the course: ${course.LongTitle}`, 'INFO');
 
 	studentModel.saveStudents(students);
 	courseModel.saveCourses(courses);

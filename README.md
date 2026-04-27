@@ -6,6 +6,12 @@
 
 https://nau.zoom.us/rec/share/zHRWMFYPH8X1LQAZ8WeK98Np0rAyAAPATai_5VSTqjBuVPM4MDNh06RhaTUSBzE.FmJ98AgcOpc9yY4g?startTime=1776055231000
 
+## Phase 2
+
+### Zoom Link
+
+https://nau.zoom.us/...placeholder
+
 ### Deployment Link (slower than running dev server due to azure)
 
 https://napi-bucpa4d7btg2ekfe.westus-01.azurewebsites.net/

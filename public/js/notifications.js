@@ -10,7 +10,7 @@ function get_notification_icon(notification) {
 function render_notification(notification) {
 	const date_str = new Date(notification.date).toLocaleString();
 	const read_class = notification.read ? '' : ' unread';
-	return `<div class="notification-item${read_class} d-flex align-items-start gap-3 border-bottom py-3 w-100 pointer ${notification.read ? 'opacity-75' : ''}" data-id="${notification.id}">
+	return `<div class="notification-item${read_class} d-flex align-items-start gap-3 border-bottom py-3 w-100 pointer p-3 ${notification.read ? 'opacity-75' : ''}" style="background-color: #f1f5f5;" data-id="${notification.id}">
 		${get_notification_icon(notification)}
 		<div class="w-100">
 			<div class="w-100 d-flex align-items-center justify-content-between">
@@ -45,6 +45,7 @@ function render_notification_list(notifications) {
 		const student_id = await get_student_id();
 		if (student_id === null) return;
 		mark_notification_read(student_id, notification_id, notification_ref);
+		notification_ref.css('opacity', 0.75);
 	});
 }
 async function load_notifications() {
@@ -54,7 +55,7 @@ async function load_notifications() {
 		return;
 	}
 	$.getJSON(`/api/students/${student_id}/notifications`, (data) => {
-		render_notification_list(data);
+		render_notification_list(data.reverse());
 	});
 }
 load_notifications();

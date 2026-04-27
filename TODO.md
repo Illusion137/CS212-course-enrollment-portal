@@ -52,8 +52,8 @@
 
 - [x] Implement GET /api/students/:id/notifications. This will fetch all notifications for a specific student. Implement GET /api/students/:id/notifications/unread/ This will fetch how many unread notifications the student has.
 - [x] Implement POST /api/override. Taking in the body: {id: 0, name: "", email: "", sid: "", course_id: "", reason: "", date: ""}. Store this request in an override request JSON database to be evaluated.
-- [ ] Implement a private endpoint POST /api/override/accept Which accepts an override request ID and accepts it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
-- [ ] Implement a private endpoint POST /api/override/deny Which accepts an override request ID and denies it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
+- [x] Implement a private endpoint POST /api/override/accept Which accepts an override request ID and accepts it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
+- [x] Implement a private endpoint POST /api/override/deny Which accepts an override request ID and denies it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
 - [x] For each subject in the JSON database, assign them a location, along with creating a coordinates map for each location.
 
 ## Other Tasks
