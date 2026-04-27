@@ -45,8 +45,8 @@
 - [x] Implement POST /api/students/:id/waitlist/:id. This will add a student to a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
 - [x] Implement DELETE /api/students/:id/waitlist/:id. This will delete a student from a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
 - [x] Implement a system that locks the database whenever it's about to be modified to prevent multiple writes at the same time. Then, when it unlocks, do the next request and repeat.
-- [ ] Implement GET /api/students/:id/map. Fetching the students' current enrolled courses map based on their student ID to be displayed on the Course Map Component. Allowing for a body to the request to contain {additional_course_ids: []} to display.
-- [ ] Write the frontend parser that checks the pathname and extracts the query params, which then calls the correct JQuery Ajax calls.
+- [x] Implement GET /api/students/:id/map. Fetching the students' current enrolled courses map based on their student ID to be displayed on the Course Map Component. Allowing for a body to the request to contain {additional_course_ids: []} to display.
+- [x] Write the frontend parser that checks the pathname and extracts the query params, which then calls the correct JQuery Ajax calls.
 
 ## Derrick Tasks
 

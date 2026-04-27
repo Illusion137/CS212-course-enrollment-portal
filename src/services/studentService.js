@@ -136,6 +136,10 @@ function markNotificationRead(id, notification_id) {
 	return studentModel.markNotificationRead(id, notification_id);
 }
 
+function getUnreadNotificationCount(studentId) {
+	return studentModel.getUnreadNotificationCount(studentId);
+}
+
 module.exports = {
 	getAllStudents,
 	getSchedule,
@@ -146,4 +150,5 @@ module.exports = {
 	getNotifications,
 	markNotificationRead,
 	insertStudent,
+	getUnreadNotificationCount,
 };

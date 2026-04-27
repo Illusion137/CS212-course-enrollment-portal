@@ -115,3 +115,14 @@ async function get_section_details(section_id) {
 		return null;
 	}
 }
+
+$(document).ready(() => {
+	const pathname = window.location.pathname;
+	for (const route of PAGE_ROUTES) {
+		const match = pathname.match(route.pattern);
+		if (match) {
+			route.handler(match);
+			break;
+		}
+	}
+});
