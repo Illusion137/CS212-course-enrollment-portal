@@ -40,7 +40,7 @@ function render_day(day, course, color, top_percent, height_percent) {
 	day_column.append(time_block);
 }
 
-function render_course(i, course) {
+function render_schedule_block(i, course) {
 	const color = SCHEDULE_COLORS[i % SCHEDULE_COLORS.length];
 	const start = parse_time(course.startTime);
 	const end = parse_time(course.endTime);
@@ -97,7 +97,7 @@ function render_conflicts(courses) {
 function render_schedule(courses) {
 	$('.schedule-day-body .schedule-block').remove();
 	for (const [i, course] of Object.entries(courses)) {
-		render_course(i, course);
+		render_schedule_block(i, course);
 	}
 	render_conflicts(courses);
 }
