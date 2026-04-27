@@ -129,6 +129,11 @@ function getNotifications(id) {
 	return studentModel.getNotifications(id);
 }
 
+function getUnreadNotificationCount(studentId) {
+    return studentModel.getUnreadNotificationCount(studentId);
+}
+
+
 function markNotificationRead(id, notification_id) {
 	return studentModel.markNotificationRead(id, notification_id);
 }
@@ -142,5 +147,6 @@ module.exports = {
 	removeFromWaitlist,
 	getNotifications,
 	markNotificationRead,
+	getUnreadNotificationCount,
 	insertStudent,
 };

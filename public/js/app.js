@@ -102,16 +102,163 @@ function time_between_buildings(mode, coords1, coords2) {
 	return km / speeds[mode];
 }
 
-async function get_section_details(section_id) {
-	const split_id = section_id.split('|');
-	if (split_id.length !== 3) return null;
-	const [subject, catalog_nbr, section_nbr] = split_id;
-	try {
-		const course = await $.getJSON(`/api/courses/${subject}-${catalog_nbr}`);
-		const section = (course.classTimes || []).find((class_time) => class_time.sectionNumber === section_nbr);
-		if (!section) return null;
-		return { sectionId: section_id, course, section };
-	} catch (e) {
-		return null;
+// Page routes 
+const PAGE_ROUTES = [
+	{
+		// /course/:section_id 
+		pattern: /^\/course\/(.+)$/,
+		handler: async (match) => {
+			const section_id = match[1];
+			const course_id = decodeURIComponent(section_id).replace(/\|/g, '|');
+ 
+			const [subject, catalog_nbr] = course_id.split('|');
+			if (!subject || !catalog_nbr) return;
+			const api_course_id = `${subject}-${catalog_nbr}`;
+ 
+			$.getJSON(`/api/courses/${encodeURIComponent(api_course_id)}`, (course) => {
+				// class details panel
+				$('.class-details-panel').html(`
+					<p><strong>Credits:</strong> ${course.Credits ?? 'N/A'}</p>
+					<p><strong>Level:</strong> ${uppercase_to_pascal_case(course.Level ?? '')}</p>
+					<p><strong>Status:</strong> ${course.overallStatus ?? 'N/A'}</p>
+				`);
+ 
+				// availability panel
+				const avail_rows = (course.classTimes ?? []).map((ct) => `
+					<tr>
+						<td>${ct.sectionNumber}</td>
+						<td>${ct.capacity}</td>
+						<td>${ct.enrolled}</td>
+						<td>${ct.capacity - ct.enrolled}</td>
+						<td>${ct.waitlistCount}</td>
+						<td>${ct.status}</td>
+					</tr>`).join('');
+				$('.class-availability-panel').html(`
+					<table class="table table-sm table-striped">
+						<thead class="table-dark"><tr>
+							<th>Section</th><th>Capacity</th><th>Enrolled</th>
+							<th>Available</th><th>Waitlist</th><th>Status</th>
+						</tr></thead>
+						<tbody>${avail_rows}</tbody>
+					</table>`);
+			});
+		},
+	},
+	{
+		// /view-courses
+		pattern: /^\/view-courses$/,
+		handler: async () => {
+			const student_id = await get_student_id();
+			if (!student_id) return;
+ 
+			const params = new URLSearchParams(window.location.search);
+			const extra = params.get('courses');
+			const additional_course_ids = extra ? extra.split(',').map((s) => s.trim()).filter(Boolean) : [];
+ 
+			$.ajax({
+				url: `/api/students/${student_id}/map`,
+				method: 'GET',
+				contentType: 'application/json',
+				data: additional_course_ids.length ? JSON.stringify({ additional_course_ids }) : undefined,
+				success: (courses) => {
+					render_schedule(courses);
+					render_course_map(courses);
+				},
+			});
+		},
+	},
+	{
+		// /manage-courses
+		pattern: /^\/manage-courses$/,
+		handler: async () => {
+			const student_id = await get_student_id();
+			if (!student_id) return;
+ 
+			const params = new URLSearchParams(window.location.search);
+ 
+			// Enroll
+			const enroll_id = params.get('enroll');
+			if (enroll_id) {
+				$.ajax({
+					url: `/api/students/${student_id}/courses/${encodeURIComponent(enroll_id)}/enroll`,
+					method: 'POST',
+					success: () => console.log(`Enrolled in ${enroll_id}`),
+					error: (xhr) => console.error('Enroll failed:', xhr.responseJSON?.error),
+				});
+			}
+ 
+			// Drop
+			const drop_id = params.get('drop');
+			if (drop_id) {
+				$.ajax({
+					url: `/api/students/${student_id}/courses/${encodeURIComponent(drop_id)}/drop`,
+					method: 'DELETE',
+					success: () => console.log(`Dropped ${drop_id}`),
+					error: (xhr) => console.error('Drop failed:', xhr.responseJSON?.error),
+				});
+			}
+ 
+			// Waitlist add
+			const waitlist_id = params.get('waitlist');
+			if (waitlist_id) {
+				$.ajax({
+					url: `/api/students/${student_id}/waitlist/${encodeURIComponent(waitlist_id)}`,
+					method: 'POST',
+					success: () => console.log(`Added to waitlist for ${waitlist_id}`),
+					error: (xhr) => console.error('Waitlist add failed:', xhr.responseJSON?.error),
+				});
+			}
+ 
+			// Waitlist remove
+			const unwaitlist_id = params.get('unwaitlist');
+			if (unwaitlist_id) {
+				$.ajax({
+					url: `/api/students/${student_id}/waitlist/${encodeURIComponent(unwaitlist_id)}`,
+					method: 'DELETE',
+					success: () => console.log(`Removed from waitlist for ${unwaitlist_id}`),
+					error: (xhr) => console.error('Waitlist remove failed:', xhr.responseJSON?.error),
+				});
+			}
+		},
+	},
+	{
+		// /notifications
+		pattern: /^\/notifications$/,
+		handler: async () => {
+			const student_id = await get_student_id();
+			if (!student_id) return;
+ 
+			$.getJSON(`/api/students/${student_id}/notifications`, (notifications) => {
+				if (!notifications.length) {
+					$('#notifications-list').html('<p class="text-muted">No notifications.</p>');
+					return;
+				}
+				const items = notifications
+					.slice()
+					.reverse()
+					.map((n) => `
+						<div class="notification-item border rounded p-3 mb-2 ${n.read ? 'text-muted' : 'fw-semibold'}">
+							<div>${n.message}</div>
+							<div class="small text-muted mt-1">${new Date(n.date).toLocaleString()}</div>
+						</div>`)
+					.join('');
+				$('#notifications-list').html(items);
+			});
+ 
+			$.getJSON(`/api/students/${student_id}/notifications/unread`, ({ unread }) => {
+				$('#unread-count').text(unread > 0 ? `(${unread} unread)` : '');
+			});
+		},
+	},
+];
+ 
+$(document).ready(() => {
+	const pathname = window.location.pathname;
+	for (const route of PAGE_ROUTES) {
+		const match = pathname.match(route.pattern);
+		if (match) {
+			route.handler(match);
+			break;
+		}
 	}
-}
+});

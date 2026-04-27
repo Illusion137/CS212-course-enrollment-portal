@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const { wait_for, generate_new_student_id } = require('../utils/utils');
+const { wait_for, generate_new_student_id, parse_section_id } = require('../utils/utils');
 const { readDB, writeDB } = require('../utils/db');
 const { hasConflict } = require('../utils/scheduler');
 const STUDENTS_DB = path.join(__dirname, '../db/students.json');
@@ -50,6 +50,27 @@ router.get('/:id/courses', (req, res) => {
 	} catch (err) {
 		res.status(404).json({ error: err.message });
 	}
+});
+
+// POST /api/students/:id/waitlist/:courseId
+router.post('/:id/waitlist/:courseId', (req, res) => {
+    try {
+        studentService.addToWaitlist(req.params.id, req.params.courseId);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+
+// DELETE /api/students/:id/waitlist/:courseId
+router.delete('/:id/waitlist/:courseId', (req, res) => {
+    try {
+        studentService.removeFromWaitlist(req.params.id, req.params.courseId);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
 // GET /api/students/:id/waitlisted
@@ -132,6 +153,43 @@ router.delete('/:id/courses/:courseId/waitlist', (req, res) => {
 	} catch (err) {
 		res.status(400).json({ error: err.message });
 	}
+});
+
+// GET /api/students/:id/map
+router.get('/:id/map', (req, res) => {
+  try {
+    const additionalCourseIds = req.body?.additional_course_ids ?? [];
+
+    const student = studentService.getSchedule(req.params.id); // returns array of section_id strings
+    const enrolledIds = student; // e.g. ["CS|212|001", "MATH|136|002"]
+
+    const courses = readDB(COURSES_DB);
+
+    const allIds = [...new Set([...enrolledIds, ...additionalCourseIds])];
+
+    const mapCourses = allIds
+      .map((section_id) => {
+        const { course_subject, course_nbr, section_nbr } = parse_section_id(section_id);
+        const course = courses.find(
+          (c) => c.Subject === course_subject && c.CatalogNbr === course_nbr
+        );
+        if (!course) return null;
+        const section = course.classTimes?.find((t) => t.sectionNumber === section_nbr) ?? null;
+        return {
+          section_id,
+          title:      course.title,
+          subject:    course.Subject,
+          course_nbr: course.CatalogNbr,
+          section,
+          is_additional: !enrolledIds.includes(section_id),
+        };
+      })
+      .filter(Boolean);
+
+    res.json({ courses: mapCourses });
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
 });
 
 module.exports = router;
