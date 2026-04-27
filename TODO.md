@@ -36,9 +36,9 @@
 
 - [x] Create the My Enrollments page, fetching the enrolled courses, listing them, and allowing the user to modify them.
 - [x] Create the Override Request page. If the user's prerequisites aren't met for a given course (verified by the backend), then allow the user to send an override to the backend. The form will contain fields like: name, email, course, and reason. With some fields being autopopulated if navigated to this page from a Course Details page.
-- [ ] Create the Course Details page. Display information about a course, such as the credits, name, subject, course number, session, career, section, days and times, room, instructor, and whether the course is still open, can be waitlisted, or is closed.
-- [ ] Create the Notifications page. Show previous notifications that haven't been read. The main notifications would be if a course was successfully enrolled or dropped, an override was approved or denied, or a waitlisted course became enrolled.
-- [ ] Take the parsed Ajax calls and implement the functionality that occurs on success and on error for each one.
+- [x] Create the Course Details page. Display information about a course, such as the credits, name, subject, course number, session, career, section, days and times, room, instructor, and whether the course is still open, can be waitlisted, or is closed.
+- [x] Create the Notifications page. Show previous notifications that haven't been read. The main notifications would be if a course was successfully enrolled or dropped, an override was approved or denied, or a waitlisted course became enrolled.
+- [x] Take the parsed Ajax calls and implement the functionality that occurs on success and on error for each one.
 
 ## Aaron Tasks
 

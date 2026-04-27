@@ -1,1 +1,37 @@
-<div></div>
+<div class="m-5" style="max-width: 560px">
+	<h1 class="mb-4">Override Request</h1>
+	<form id="override-form">
+		<div class="mb-3">
+			<label class="form-label bold" for="override-form-name"><span class="required">*</span> Full Name</label>
+			<input class="form-control" type="text" id="override-form-name" required />
+		</div>
+		<div class="mb-3">
+			<label class="form-label bold" for="override-form-email"><span class="required">*</span> Email</label>
+			<input class="form-control" type="email" id="override-form-email" required />
+		</div>
+		<div class="mb-3">
+			<label class="form-label bold"><span class="required">*</span> Course</label>
+			<div class="d-flex flex-column flex-md-row flex-wrap gap-2">
+				<div class="dropdown">
+					<button id="override-subject-btn" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Subject</button>
+					<ul id="override-subject-list" class="dropdown-menu" style="max-height: 300px; overflow-y: auto"></ul>
+				</div>
+				<div class="dropdown">
+					<button id="override-course-btn" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>Select Course</button>
+					<ul id="override-course-list" class="dropdown-menu" style="max-height: 300px; overflow-y: auto"></ul>
+				</div>
+				<div class="dropdown">
+					<button id="override-section-btn" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>Select Section</button>
+					<ul id="override-section-list" class="dropdown-menu"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="mb-3">
+			<label class="form-label bold" for="override-form-reason"><span class="required">*</span> Reason</label>
+			<textarea class="form-control" rows="5" id="override-form-reason" required></textarea>
+		</div>
+		<div id="override-alert"></div>
+		<button class="btn btn-dark w-100" type="submit">Submit Request</button>
+	</form>
+</div>
+<script src="/js/override.js"></script>
