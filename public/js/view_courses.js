@@ -56,7 +56,6 @@ function render_course_list() {
 			list.append(render_course(course));
 		}
 	}
-
 	if (list.children().length === 0) {
 		list.append('<p class="text-muted">No courses found.</p>');
 	}
@@ -73,7 +72,7 @@ async function load_courses() {
 
 	try {
 		const enrolled_response = await $.getJSON(`/api/students/${student_id}/courses`);
-		const enrolled_ids = Array.isArray(enrolled_response) ? enrolled_response.filter((x) => typeof x === 'string') : [];
+		const enrolled_ids = Array.isArray(enrolled_response) ? enrolled_response.filter((course) => typeof course === 'string') : [];
 		enrolled_courses = await load_section_details(enrolled_ids);
 	} catch (e) {
 		enrolled_courses = [];
@@ -91,7 +90,7 @@ async function load_courses() {
 	update_visualizers();
 }
 
-$('#show-enrolled, #show-waitlisted').on('change', function () {
+$('#show-enrolled, #show-waitlisted').on('change', () => {
 	render_course_list();
 	update_visualizers();
 });
