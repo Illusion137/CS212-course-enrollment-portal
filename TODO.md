@@ -42,16 +42,16 @@
 
 ## Aaron Tasks
 
-- [ ] Implement POST /api/students/:id/waitlist/:id. This will add a student to a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
-- [ ] Implement DELETE /api/students/:id/waitlist/:id. This will delete a student from a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
-- [ ] Implement a system that locks the database whenever it's about to be modified to prevent multiple writes at the same time. Then, when it unlocks, do the next request and repeat.
+- [x] Implement POST /api/students/:id/waitlist/:id. This will add a student to a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
+- [x] Implement DELETE /api/students/:id/waitlist/:id. This will delete a student from a waitlist for a specific course ID. This will also trigger a notification to be added to the student's data.
+- [x] Implement a system that locks the database whenever it's about to be modified to prevent multiple writes at the same time. Then, when it unlocks, do the next request and repeat.
 - [ ] Implement GET /api/students/:id/map. Fetching the students' current enrolled courses map based on their student ID to be displayed on the Course Map Component. Allowing for a body to the request to contain {additional_course_ids: []} to display.
 - [ ] Write the frontend parser that checks the pathname and extracts the query params, which then calls the correct JQuery Ajax calls.
 
 ## Derrick Tasks
 
-- [ ] Implement GET /api/students/:id/notifications. This will fetch all notifications for a specific student. Implement GET /api/students/:id/notifications/unread/ This will fetch how many unread notifications the student has.
-- [ ] Implement POST /api/override. Taking in the body: {id: 0, name: "", email: "", sid: "", course_id: "", reason: "", date: ""}. Store this request in an override request JSON database to be evaluated.
+- [x] Implement GET /api/students/:id/notifications. This will fetch all notifications for a specific student. Implement GET /api/students/:id/notifications/unread/ This will fetch how many unread notifications the student has.
+- [x] Implement POST /api/override. Taking in the body: {id: 0, name: "", email: "", sid: "", course_id: "", reason: "", date: ""}. Store this request in an override request JSON database to be evaluated.
 - [ ] Implement a private endpoint POST /api/override/accept Which accepts an override request ID and accepts it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
 - [ ] Implement a private endpoint POST /api/override/deny Which accepts an override request ID and denies it. Updating the courses database and the students database. Then, send out a notification to the user informing them.
 - [x] For each subject in the JSON database, assign them a location, along with creating a coordinates map for each location.
