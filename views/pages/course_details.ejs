@@ -1,49 +1,118 @@
-<div class="m-5">
-	<h1><b><%= course.Subject %> <%= course.CatalogNbr %> </b> - <span id="course-long-title"><%= course.LongTitle %></span></h1>
-	<div class="p-3 border rounded-2">
-		<h2 class="h5">Class Details</h2>
+<div class="d-flex m-4 m-md-4 gap-3" style="height: calc(100vh - 100px)">
+	<div class="d-flex flex-column gap-3" style="height: calc(100vh - 100px); overflow-y: auto">
+		<h2 class="mb-1"><b><%= course.Subject %> <%= course.CatalogNbr %></b> - <span id="course-long-title"><%= course.LongTitle %></span> [<%= section.sectionNumber %>]</h2>
+		<div class="p-3 border rounded-2">
+			<h2 class="h5 mb-3">Class Details</h2>
+			<div class="row row-cols-2 row-cols-md-4">
+				<div>
+					<small class="text-muted small">Subject</small>
+					<p><%= course.Subject %></p>
+				</div>
+				<div>
+					<small class="text-muted small">Course Number</small>
+					<p><%= course.CatalogNbr %></p>
+				</div>
+				<div>
+					<small class="text-muted small">Credits</small>
+					<p><%= course.Credits %></p>
+				</div>
+				<div>
+					<small class="text-muted small">Level</small>
+					<p><%= course.Level %></p>
+				</div>
+			</div>
+		</div>
+		<div class="p-3 border rounded-2">
+			<h2 class="h5 mb-3">Meeting Info</h2>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped table-hover mb-0">
+					<thead class="table-light">
+						<tr>
+							<th>Section</th>
+							<th>Days &amp; Times</th>
+							<th>Room</th>
+							<th>Instructor</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><%= section.sectionNumber %></td>
+							<td class="text-nowrap"><%= section.days || 'TBA' %> &nbsp; <%= section.startTime %> - <%= section.endTime %></td>
+							<td><%= section.room || 'TBA' %></td>
+							<td><%= section.instructor || 'TBA' %></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="p-3 border rounded-2">
+			<h2 class="h5 mb-3">Enrollment Info</h2>
+			<% if(course.parsedPrerequisites.prerequisites.length > 0) { %>
+				<p class="mb-1"><span class="fw-semibold">Prerequisite(s):</span></p>
+				<ul class="mb-2">
+					<% for(const prereq of course.parsedPrerequisites.prerequisites) { %>
+						<li><%= prereq %></li>
+					<% } %>
+				</ul>
+			<% } else { %>
+				<p class="text-muted mb-1">No prerequisites.</p>
+			<% } %>
+			<% if(course.parsedPrerequisites.corequisites.length > 0) { %>
+				<p class="mb-1"><span class="fw-semibold">Corequisite(s):</span></p>
+				<ul class="mb-2">
+					<% for(const coreq of course.parsedPrerequisites.corequisites) { %>
+						<li><%= coreq %></li>
+					<% } %>
+				</ul>
+			<% } %>
+			<% if(course.parsedPrerequisites.admissionRequirement) { %>
+				<p class="mb-1"><span class="fw-semibold">Admission Requirement:</span> <%= course.parsedPrerequisites.admissionRequirement %></p>
+			<% } %>
+		</div>
+		<div class="p-3 border rounded-2">
+			<h2 class="h5 mb-3">Class Availability</h2>
+			<div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+				<span class="badge fs-6 <%= section.status === 'Open' ? 'bg-success' : section.status === 'Waitlist' ? 'bg-warning text-dark' : 'bg-danger' %>">
+					<%= section.status %>
+				</span>
+				<span class="text-muted"><%= section.enrolled %> / <%= section.capacity %> enrolled</span>
+				<% if(section.waitlistCount > 0) { %>
+					<span class="text-muted"><%= section.waitlistCount %> on waitlist</span>
+				<% } %>
+			</div>
+			<div id="course-action-alert"></div>
+			<div class="d-flex gap-2 flex-wrap">
+				<% if(section.status === 'Open') { %>
+					<button id="enroll-btn" class="btn btn-dark">Enroll</button>
+				<% } else if(section.status === 'Waitlist') { %>
+					<button id="waitlist-btn" class="btn btn-outline-dark">Add to Waitlist</button>
+				<% } %>
+				<% if(course.parsedPrerequisites.prerequisites.length > 0) { %>
+					<a href="/override?course=<%= course.Subject %>|<%= course.CatalogNbr %>|<%= section.sectionNumber %>" class="btn btn-outline-secondary">Request Override</a>
+				<% } %>
+			</div>
+		</div>
+		<% if(course.Description) { %>
+		<div class="p-3 border rounded-2">
+			<h2 class="h5 mb-3">Description</h2>
+			<p class="mb-0"><%= course.Description %></p>
+		</div>
+		<% } %>
 	</div>
-	<div class="p-3 border rounded-2">
-		<h2 class="h5">Meeting Info</h2>
-		<table class="table table-striped table-hover">
-			<thead class="table-dark">
-				<tr>
-					<td>Days & Times</td>
-					<td>Building</td>
-					<td>Room</td>
-					<td>Map</td>
-					<td>Instructor</td>
-					<td>Meeting Dates</td>
-				</tr>
-			</thead>
-			<tr>
-				<td>MoWe 2:20PM - 3:35PM</td>
-				<td>Southwest Forest</td>
-				<td>018</td>
-				<td></td>
-				<td>TBA</td>
-				<td>08/24/2026 - 12/11/2026</td>
-			</tr>
-		</table>
+	<div class="border-left pt-4 pb-4 d-flex flex-column gap-4 flex-shrink-0" style="overflow-y: auto; height: calc(100vh - 70px)">
+		<%- include('../partials/schedule_view') %> <%- include('../partials/course_map') %>
 	</div>
-	<div class="p-3 border rounded-2">
-		<h2 class="h5">Enrollment Info</h2>
-		<p>Prerequisite(s)<span>✅</span>: CS 249 or CYB 136</p>
-		<p>Corequisite(s)<span>✅</span>: CS 249 or CYB 136</p>
-	</div>
-	<div class="p-3 border rounded-2">
-		<h2 class="h5">Class Availability</h2>
-	</div>
-	<div class="p-3 border rounded-2">
-		<h2 class="h5">Description</h2>
-		<p>
-			Introduces web programming while emphasizing the creation of interactive and dynamic websites. Topics include HTML, CSS, JavaScript, and client-server website programming. Letter grade
-			only.
-		</p>
-	</div>
-	<script>
-		const course_long_title = $('#course-long-title').text() ?? '';
-		console.log(uppercase_to_pascal_case(course_long_title));
-		$('#course-long-title').text(uppercase_to_pascal_case(course_long_title));
-	</script>
 </div>
+<script>
+	const course_long_title = $('#course-long-title').text() ?? '';
+	$('#course-long-title').text(uppercase_to_pascal_case(course_long_title));
+	const SECTION_ID = '<%= course.Subject %>|<%= course.CatalogNbr %>|<%= section.sectionNumber %>';
+	const CURRENT_COURSE_SCHEDULE = {
+		label: '<%= course.Subject %> <%= course.CatalogNbr %> - ' + uppercase_to_pascal_case('<%= course.LongTitle %>'),
+		days: '<%= section.days || "" %>',
+		startTime: '<%= section.startTime || "" %>',
+		endTime: '<%= section.endTime || "" %>',
+		room: '<%= section.room || "" %>',
+	};
+</script>
+<script src="/js/course_details.js"></script>
