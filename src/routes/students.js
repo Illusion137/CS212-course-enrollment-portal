@@ -52,6 +52,18 @@ router.get('/:id/courses', (req, res) => {
 	}
 });
 
+// GET /api/students/:id/waitlisted
+router.get('/:id/waitlisted', (req, res) => {
+	try {
+		const students = readDB(STUDENTS_DB);
+		const student = students.find((s) => s.id === req.params.id);
+		if (!student) return res.status(404).json({ error: 'Student not found' });
+		res.json(student.waitlistedCourses || []);
+	} catch (err) {
+		res.status(404).json({ error: err.message });
+	}
+});
+
 // GET /api/students/:id/notifications
 router.get('/:id/notifications', (req, res) => {
 	try {
