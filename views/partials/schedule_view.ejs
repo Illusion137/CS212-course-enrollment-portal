@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="/css/schedule_view.css" />
 <div id="schedule-view-component" class="w-100 card shadow-sm schedule-card mb-0" style="min-height: 50vh; overflow-y: auto">
 	<div class="schedule-header-bar rounded-top">Weekly Schedule</div>
+	<div id="schedule-conflict-banner" style="display:none;">
+		<i id="schedule-conflict-icon" class="bi bi-exclamation-diamond"></i>
+		<div id="schedule-conflict-title">Schedule Conflict(s) Found</div>
+		<div id="schedule-conflict-body"></div>
+	</div>
 	<div class="schedule-body-wrap">
 		<div class="schedule-inner">
 			<div class="schedule-time-col">

@@ -90,3 +90,6 @@
 .pointer {
 	cursor: pointer;
 }
+.border-left {
+	border-left: 1px solid black;
+}
