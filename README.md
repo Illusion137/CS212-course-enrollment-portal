@@ -10,7 +10,7 @@ https://nau.zoom.us/rec/share/zHRWMFYPH8X1LQAZ8WeK98Np0rAyAAPATai_5VSTqjBuVPM4MD
 
 ### Zoom Link
 
-https://nau.zoom.us/...placeholder
+https://nau.zoom.us/rec/share/ilIpHBlBXcVk8FQlt9MWmXwBN-HPo3ZnXZcZIOjElv5ZAw_yXtWJrvxk1GaBuQlp.tFA1EJwWIz0GGrL7?startTime=1777335398000
 
 ### Deployment Link (slower than running dev server due to azure)
 
