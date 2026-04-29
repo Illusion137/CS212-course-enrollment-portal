@@ -20,7 +20,7 @@ function notify(student, title, message, type) {
 
 function insertStudent(id) {
 	const students = studentModel.getAllStudents();
-	students.push({ id });
+	students.push({ id, courses: [], waitlistedCourses: [], notifications: [] });
 	studentModel.saveStudents(students);
 }
 

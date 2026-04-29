@@ -1,1 +1,1 @@
-zip -r dist/CS212_Phase2_Codebase.zip . -x '*node_modules*/*' -x '*views_old*/*' -x '*.git*/*'
+zip -r dist/CS212_Project_Group_1_Course_Enrollment_Portal.zip . -x '*node_modules*/*' -x '*views_old*/*' -x '*.git*/*'

@@ -12,6 +12,10 @@ https://nau.zoom.us/rec/share/zHRWMFYPH8X1LQAZ8WeK98Np0rAyAAPATai_5VSTqjBuVPM4MD
 
 https://nau.zoom.us/rec/share/ilIpHBlBXcVk8FQlt9MWmXwBN-HPo3ZnXZcZIOjElv5ZAw_yXtWJrvxk1GaBuQlp.tFA1EJwWIz0GGrL7?startTime=1777335398000
 
+## Final Presentation
+
+https://nau.zoom.us/rec/share/0RGT1xsQ2PPy58TcIgk5mn3lLEuGZF3q-_IlMQ0m8i5-WLxc0guSV6VoH-r687Xt.FK0v4s_jCLrDxzq2?startTime=1777427916000
+
 ### Deployment Link (slower than running dev server due to azure)
 
 https://napi-bucpa4d7btg2ekfe.westus-01.azurewebsites.net/
