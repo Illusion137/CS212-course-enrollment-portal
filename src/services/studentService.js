@@ -45,6 +45,9 @@ function enroll(studentId, courseId) {
 
 	if (!student || !course) throw new Error('Not found');
 
+	if (!student.courses) student.courses = [];
+	if (!student.notifications) student.notifications = [];
+
 	if (student.courses.includes(courseId)) {
 		throw new Error('Already enrolled');
 	}
@@ -71,6 +74,9 @@ function drop(studentId, courseId) {
 
 	if (!student || !course) throw new Error('Not found');
 
+	if (!student.courses) student.courses = [];
+	if (!student.notifications) student.notifications = [];
+
 	student.courses = student.courses.filter((section_id) => section_id !== courseId);
 
 	course.availableSeats++;
@@ -92,6 +98,9 @@ function addToWaitlist(studentId, courseId) {
 	const course = find_course(courses, courseId);
 
 	if (!student || !course) throw new Error('Not found');
+
+	if (!student.waitlistedCourses) student.waitlistedCourses = [];
+	if (!student.notifications) student.notifications = [];
 
 	if (!student.waitlistedCourses.includes(courseId)) {
 		student.waitlistedCourses.push(courseId);
@@ -120,6 +129,7 @@ function removeFromWaitlist(studentId, courseId) {
 	if (!student || !course) throw new Error('Not found');
 
 	student.waitlistedCourses = (student.waitlistedCourses || []).filter((section_id) => section_id !== courseId);
+	if (!student.notifications) student.notifications = [];
 	course.waitlist = (course.waitlist || []).filter((id) => id !== studentId);
 
 	studentModel.saveStudents(students);
