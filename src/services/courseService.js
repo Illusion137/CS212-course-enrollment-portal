@@ -34,7 +34,7 @@ function searchCourses(query = {}) {
 	}
 
 	if (subject?.trim()) {
-		courses = courses.filter((c) => ci(c.Subject, subject));
+		courses = courses.filter((c) => c.Subject === subject.trim());
 	}
 	// course number
 	if (catalogNbr?.trim()) {

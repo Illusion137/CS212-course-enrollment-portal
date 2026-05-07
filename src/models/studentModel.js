@@ -31,7 +31,7 @@ function getUnreadNotificationCount(id) {
 	const student = getStudentByID(id);
 
 	if (!student) {
-		throw new error('Student not found');
+		throw new Error('Student not found');
 	}
 
 	const notifications = student.notifications || [];
